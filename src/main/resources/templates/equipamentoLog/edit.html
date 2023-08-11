@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{equipamentoLog.edit.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{equipamentoLog.edit.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/equipamentoLogs}" th:text="#{equipamentoLog.edit.back}" class="btn btn-secondary" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('equipamentoLog')}" />
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='descricao')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='dataInicio', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='dataFim', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='obs')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='atividade', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='equipamento', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='usuarioInicio', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='usuarioFim', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='anexo', type='select')}" />
+                <input type="submit" th:value="#{equipamentoLog.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

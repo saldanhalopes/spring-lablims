@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{arquivos.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{arquivos.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/arquivoss/add}" th:text="#{arquivos.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='arquivos')}" />
+            <div th:if="${arquivoss.empty}" th:text="#{arquivos.list.empty}" />
+            <div th:if="${!arquivoss.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{arquivos.id.label}" scope="col" />
+                            <th th:text="#{arquivos.nome.label}" scope="col" />
+                            <th th:text="#{arquivos.tipo.label}" scope="col" />
+                            <th th:text="#{arquivos.descricao.label}" scope="col" />
+                            <th th:text="#{arquivos.tamanho.label}" scope="col" />
+                            <th th:text="#{arquivos.arquivo.label}" scope="col" />
+                            <th th:text="#{arquivos.dataCriacao.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="arquivos : ${arquivoss}">
+                            <td th:text="${arquivos.id}" />
+                            <td th:text="${arquivos.nome}" />
+                            <td th:text="${arquivos.tipo}" />
+                            <td th:text="${arquivos.descricao}" />
+                            <td th:text="${arquivos.tamanho}" />
+                            <td th:text="${arquivos.arquivo}" />
+                            <td th:text="${arquivos.dataCriacao}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/arquivoss/edit/{id}(id=${arquivos.id})}" th:text="#{arquivos.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/arquivoss/delete/{id}(id=${arquivos.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{arquivos.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

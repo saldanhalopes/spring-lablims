@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{colunaConfig.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{colunaConfig.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/colunaConfigs/add}" th:text="#{colunaConfig.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='colunaConfig')}" />
+            <div th:if="${colunaConfigs.empty}" th:text="#{colunaConfig.list.empty}" />
+            <div th:if="${!colunaConfigs.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{colunaConfig.id.label}" scope="col" />
+                            <th th:text="#{colunaConfig.tipo.label}" scope="col" />
+                            <th th:text="#{colunaConfig.configuracao.label}" scope="col" />
+                            <th th:text="#{colunaConfig.descricao.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="colunaConfig : ${colunaConfigs}">
+                            <td th:text="${colunaConfig.id}" />
+                            <td th:text="${colunaConfig.tipo}" />
+                            <td th:text="${colunaConfig.configuracao}" />
+                            <td th:text="${colunaConfig.descricao}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/colunaConfigs/edit/{id}(id=${colunaConfig.id})}" th:text="#{colunaConfig.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/colunaConfigs/delete/{id}(id=${colunaConfig.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{colunaConfig.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

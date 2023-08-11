@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{lote.edit.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{lote.edit.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/lotes}" th:text="#{lote.edit.back}" class="btn btn-secondary" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('lote')}" />
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='lote')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='qtdEstoque')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataStatus', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataEntrada', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataInicioAnalise', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataLiberacao', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataEnvioGarantia', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataNecessidade', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataValidade', inputClass='js-datetimepicker')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='dataImpressao')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='numeroDocumento')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='complemento')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='obs')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='material', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='lote', field='amostraTipo', type='select')}" />
+                <input type="submit" th:value="#{lote.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

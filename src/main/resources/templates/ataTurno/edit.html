@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{ataTurno.edit.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{ataTurno.edit.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/ataTurnos}" th:text="#{ataTurno.edit.back}" class="btn btn-secondary" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('ataTurno')}" />
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='passagem', type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='agrupador')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='turno', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='setor', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='usuario', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='ataTurno', field='equipamentos', type='multiselect')}" />
+                <input type="submit" th:value="#{ataTurno.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

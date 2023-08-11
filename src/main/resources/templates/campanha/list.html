@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{campanha.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{campanha.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/campanhas/add}" th:text="#{campanha.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='campanha')}" />
+            <div th:if="${campanhas.empty}" th:text="#{campanha.list.empty}" />
+            <div th:if="${!campanhas.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{campanha.id.label}" scope="col" />
+                            <th th:text="#{campanha.previsaoInicio.label}" scope="col" />
+                            <th th:text="#{campanha.previsaoFim.label}" scope="col" />
+                            <th th:text="#{campanha.dataInicio.label}" scope="col" />
+                            <th th:text="#{campanha.dataFim.label}" scope="col" />
+                            <th th:text="#{campanha.status.label}" scope="col" />
+                            <th th:text="#{campanha.obs.label}" scope="col" />
+                            <th th:text="#{campanha.ordem.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="campanha : ${campanhas}">
+                            <td th:text="${campanha.id}" />
+                            <td th:text="${campanha.previsaoInicio}" />
+                            <td th:text="${campanha.previsaoFim}" />
+                            <td th:text="${campanha.dataInicio}" />
+                            <td th:text="${campanha.dataFim}" />
+                            <td th:text="${campanha.status}" />
+                            <td th:text="${campanha.obs}" />
+                            <td th:text="${campanha.ordem}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/campanhas/edit/{id}(id=${campanha.id})}" th:text="#{campanha.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/campanhas/delete/{id}(id=${campanha.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{campanha.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

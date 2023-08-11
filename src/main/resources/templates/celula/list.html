@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{celula.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{celula.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/celulas/add}" th:text="#{celula.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='celula')}" />
+            <div th:if="${celulas.empty}" th:text="#{celula.list.empty}" />
+            <div th:if="${!celulas.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{celula.id.label}" scope="col" />
+                            <th th:text="#{celula.celula.label}" scope="col" />
+                            <th th:text="#{celula.descricao.label}" scope="col" />
+                            <th th:text="#{celula.tipo.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="celula : ${celulas}">
+                            <td th:text="${celula.id}" />
+                            <td th:text="${celula.celula}" />
+                            <td th:text="${celula.descricao}" />
+                            <td th:text="${celula.tipo}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/celulas/edit/{id}(id=${celula.id})}" th:text="#{celula.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/celulas/delete/{id}(id=${celula.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{celula.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{grupo.edit.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{grupo.edit.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/grupos}" th:text="#{grupo.edit.back}" class="btn btn-secondary" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('grupo')}" />
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='grupo', field='grupo')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='grupo', field='tipo')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='grupo', field='regra')}" />
+                <input type="submit" th:value="#{grupo.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

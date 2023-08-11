@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{lote.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{lote.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/lotes/add}" th:text="#{lote.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='lote')}" />
+            <div th:if="${lotes.empty}" th:text="#{lote.list.empty}" />
+            <div th:if="${!lotes.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{lote.id.label}" scope="col" />
+                            <th th:text="#{lote.lote.label}" scope="col" />
+                            <th th:text="#{lote.qtdEstoque.label}" scope="col" />
+                            <th th:text="#{lote.dataStatus.label}" scope="col" />
+                            <th th:text="#{lote.dataEntrada.label}" scope="col" />
+                            <th th:text="#{lote.dataInicioAnalise.label}" scope="col" />
+                            <th th:text="#{lote.dataLiberacao.label}" scope="col" />
+                            <th th:text="#{lote.dataEnvioGarantia.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="lote : ${lotes}">
+                            <td th:text="${lote.id}" />
+                            <td th:text="${lote.lote}" />
+                            <td th:text="${lote.qtdEstoque}" />
+                            <td th:text="${lote.dataStatus}" />
+                            <td th:text="${lote.dataEntrada}" />
+                            <td th:text="${lote.dataInicioAnalise}" />
+                            <td th:text="${lote.dataLiberacao}" />
+                            <td th:text="${lote.dataEnvioGarantia}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/lotes/edit/{id}(id=${lote.id})}" th:text="#{lote.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/lotes/delete/{id}(id=${lote.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{lote.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

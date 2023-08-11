@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{celula.edit.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{celula.edit.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/celulas}" th:text="#{celula.edit.back}" class="btn btn-secondary" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('celula')}" />
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='celula', field='celula')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='celula', field='descricao')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='celula', field='equipamento', type='multiselect')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='celula', field='usuario', type='multiselect')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='celula', field='tipo', type='select')}" />
+                <input type="submit" th:value="#{celula.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{analiseProdutividade.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{analiseProdutividade.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/analiseProdutividades/add}" th:text="#{analiseProdutividade.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='analiseProdutividade')}" />
+            <div th:if="${analiseProdutividades.empty}" th:text="#{analiseProdutividade.list.empty}" />
+            <div th:if="${!analiseProdutividades.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{analiseProdutividade.id.label}" scope="col" />
+                            <th th:text="#{analiseProdutividade.analiseProdutividade.label}" scope="col" />
+                            <th th:text="#{analiseProdutividade.siglaProdutividade.label}" scope="col" />
+                            <th th:text="#{analiseProdutividade.descricaoProdutividade.label}" scope="col" />
+                            <th th:text="#{analiseProdutividade.corProdutividade.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="analiseProdutividade : ${analiseProdutividades}">
+                            <td th:text="${analiseProdutividade.id}" />
+                            <td th:text="${analiseProdutividade.analiseProdutividade}" />
+                            <td th:text="${analiseProdutividade.siglaProdutividade}" />
+                            <td th:text="${analiseProdutividade.descricaoProdutividade}" />
+                            <td th:text="${analiseProdutividade.corProdutividade}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/analiseProdutividades/edit/{id}(id=${analiseProdutividade.id})}" th:text="#{analiseProdutividade.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/analiseProdutividades/delete/{id}(id=${analiseProdutividade.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{analiseProdutividade.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

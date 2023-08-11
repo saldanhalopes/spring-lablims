@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{amostraTipo.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{amostraTipo.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/amostraTipos/add}" th:text="#{amostraTipo.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='amostraTipo')}" />
+            <div th:if="${amostraTipos.empty}" th:text="#{amostraTipo.list.empty}" />
+            <div th:if="${!amostraTipos.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{amostraTipo.id.label}" scope="col" />
+                            <th th:text="#{amostraTipo.tipo.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="amostraTipo : ${amostraTipos}">
+                            <td th:text="${amostraTipo.id}" />
+                            <td th:text="${amostraTipo.tipo}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/amostraTipos/edit/{id}(id=${amostraTipo.id})}" th:text="#{amostraTipo.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/amostraTipos/delete/{id}(id=${amostraTipo.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{amostraTipo.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

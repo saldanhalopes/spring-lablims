@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{loteStatus.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{loteStatus.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/loteStatuss/add}" th:text="#{loteStatus.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='loteStatus')}" />
+            <div th:if="${loteStatuss.empty}" th:text="#{loteStatus.list.empty}" />
+            <div th:if="${!loteStatuss.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{loteStatus.id.label}" scope="col" />
+                            <th th:text="#{loteStatus.dataStatus.label}" scope="col" />
+                            <th th:text="#{loteStatus.dataPrevisao.label}" scope="col" />
+                            <th th:text="#{loteStatus.dataProgramado.label}" scope="col" />
+                            <th th:text="#{loteStatus.dataConferencia1.label}" scope="col" />
+                            <th th:text="#{loteStatus.dataConferencia2.label}" scope="col" />
+                            <th th:text="#{loteStatus.obs.label}" scope="col" />
+                            <th th:text="#{loteStatus.lote.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="loteStatus : ${loteStatuss}">
+                            <td th:text="${loteStatus.id}" />
+                            <td th:text="${loteStatus.dataStatus}" />
+                            <td th:text="${loteStatus.dataPrevisao}" />
+                            <td th:text="${loteStatus.dataProgramado}" />
+                            <td th:text="${loteStatus.dataConferencia1}" />
+                            <td th:text="${loteStatus.dataConferencia2}" />
+                            <td th:text="${loteStatus.obs}" />
+                            <td th:text="${loteStatus.lote}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/loteStatuss/edit/{id}(id=${loteStatus.id})}" th:text="#{loteStatus.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/loteStatuss/delete/{id}(id=${loteStatus.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{loteStatus.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

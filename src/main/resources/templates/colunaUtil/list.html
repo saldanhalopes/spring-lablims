@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{colunaUtil.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{colunaUtil.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/colunaUtils/add}" th:text="#{colunaUtil.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='colunaUtil')}" />
+            <div th:if="${colunaUtils.empty}" th:text="#{colunaUtil.list.empty}" />
+            <div th:if="${!colunaUtils.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{colunaUtil.id.label}" scope="col" />
+                            <th th:text="#{colunaUtil.codigoColuna.label}" scope="col" />
+                            <th th:text="#{colunaUtil.serialNumber.label}" scope="col" />
+                            <th th:text="#{colunaUtil.dataAtivacao.label}" scope="col" />
+                            <th th:text="#{colunaUtil.dataVerificacao.label}" scope="col" />
+                            <th th:text="#{colunaUtil.dataDescarte.label}" scope="col" />
+                            <th th:text="#{colunaUtil.estoque.label}" scope="col" />
+                            <th th:text="#{colunaUtil.obs.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="colunaUtil : ${colunaUtils}">
+                            <td th:text="${colunaUtil.id}" />
+                            <td th:text="${colunaUtil.codigoColuna}" />
+                            <td th:text="${colunaUtil.serialNumber}" />
+                            <td th:text="${colunaUtil.dataAtivacao}" />
+                            <td th:text="${colunaUtil.dataVerificacao}" />
+                            <td th:text="${colunaUtil.dataDescarte}" />
+                            <td th:text="${colunaUtil.estoque}" />
+                            <td th:text="${colunaUtil.obs}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/colunaUtils/edit/{id}(id=${colunaUtil.id})}" th:text="#{colunaUtil.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/colunaUtils/delete/{id}(id=${colunaUtil.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{colunaUtil.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>

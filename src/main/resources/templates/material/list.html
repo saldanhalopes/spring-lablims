@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{material.list.headline}" />
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 th:text="#{material.list.headline}" class="flex-grow-1" />
+                <div>
+                    <a th:href="@{/materials/add}" th:text="#{material.list.createNew}" class="btn btn-primary ms-2" />
+                </div>
+            </div>
+            <div th:replace="~{fragments/utils::searchFilter(object='material')}" />
+            <div th:if="${materials.empty}" th:text="#{material.list.empty}" />
+            <div th:if="${!materials.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th th:text="#{material.id.label}" scope="col" />
+                            <th th:text="#{material.controleEspecial.label}" scope="col" />
+                            <th th:text="#{material.fiscalizado.label}" scope="col" />
+                            <th th:text="#{material.item.label}" scope="col" />
+                            <th th:text="#{material.material.label}" scope="col" />
+                            <th th:text="#{material.tipoMaterial.label}" scope="col" />
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="material : ${materials}">
+                            <td th:text="${material.id}" />
+                            <td th:text="${material.controleEspecial}" />
+                            <td th:text="${material.fiscalizado}" />
+                            <td th:text="${material.item}" />
+                            <td th:text="${material.material}" />
+                            <td th:text="${material.tipoMaterial}" />
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/materials/edit/{id}(id=${material.id})}" th:text="#{material.list.edit}" class="btn btn-sm btn-info" />
+                                    <form th:action="@{/materials/delete/{id}(id=${material.id})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button th:text="#{material.list.delete}" type="submit" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:replace="~{fragments/utils::pagination()}" />
+        </div>
+    </body>
+</html>
