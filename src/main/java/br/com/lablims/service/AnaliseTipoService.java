@@ -78,6 +78,7 @@ public class AnaliseTipoService {
         analiseTipoDTO.setAnaliseTipo(analiseTipo.getAnaliseTipo());
         analiseTipoDTO.setSiglaAnaliseTipo(analiseTipo.getSiglaAnaliseTipo());
         analiseTipoDTO.setDescricaoAnaliseTipo(analiseTipo.getDescricaoAnaliseTipo());
+        analiseTipoDTO.setVersion(analiseTipo.getVersion());
         return analiseTipoDTO;
     }
 

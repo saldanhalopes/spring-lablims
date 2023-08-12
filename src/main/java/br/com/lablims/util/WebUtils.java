@@ -74,7 +74,7 @@ public class WebUtils {
         step.setUrl(getStepUrl(page, page.nextOrLastPageable().getPageNumber()));
         steps.add(step);
 
-        final long startElements = page.getNumber() * page.getSize() + 1l;
+        final long startElements = (long) page.getNumber() * page.getSize() + 1L;
         final long endElements = Math.min(startElements + page.getSize() - 1, page.getTotalElements());
         final String range = startElements == endElements ? "" + startElements : startElements + " - " + endElements;
         final PaginationModel paginationModel = new PaginationModel();

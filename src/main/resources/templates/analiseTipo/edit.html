@@ -1,55 +1,48 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{analiseTipo.edit.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{analiseTipo.edit.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/analiseTipos}" th:text="#{analiseTipo.edit.back}" class="btn btn-secondary" />
-                </div>
-            </div>
-            <div th:replace="~{fragments/forms::globalErrors('analiseTipo')}" />
-            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='analiseTipo')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='siglaAnaliseTipo')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='descricaoAnaliseTipo')}" />
-                <input type="submit" th:value="#{analiseTipo.edit.headline}" class="btn btn-primary mt-4" />
-            </form>
-
-            <table class="table table-striped table-hover align-middle">
-                <thead>
-                <tr>
-                    <th>Revisao</th>
-                    <th>Tipo</th>
-                    <th th:text="#{analiseTipo.id.label}" scope="col"/>
-                    <th th:text="#{analiseTipo.analiseTipo.label}" scope="col"/>
-                    <th th:text="#{analiseTipo.siglaAnaliseTipo.label}" scope="col"/>
-                    <th th:text="#{analiseTipo.descricaoAnaliseTipo.label}" scope="col"/>
-                    <th>Usuário</th>
-                    <th>Data</th>
-                    <th>Ip</th>
-                    <th>Motivo</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="a:${audits}">
-                    <td th:text="${a.getRevisao().getId()}"></td>
-                    <td th:text="${a.getRevisao().getRevType()}"></td>
-                    <td th:text="${a.getEntidade().getId()}"></td>
-                    <td th:text="${a.getEntidade().getAnaliseTipo()}"></td>
-                    <td th:text="${a.getEntidade().getSiglaAnaliseTipo()}"></td>
-                    <td th:text="${a.getEntidade().getDescricaoAnaliseTipo()}"></td>
-                    <td th:text="${a.getRevisao().getUserName()}"></td>
-                    <td th:text="${a.getRevisao().getRevisionDate()}"></td>
-                    <td th:text="${a.getRevisao().getIp()}"></td>
-                    <td th:text="${a.getRevisao().getMotivo()}"></td>
-                </tr>
-                </tbody>
-            </table>
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{analiseTipo.edit.headline}"/>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="card-title d-flex">
+                <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
+                <h1 th:text="#{analiseTipo.edit.headline}" class="flex-grow-1"/>
+            </h4>
+            <ul class="list-inline d-flex mb-0">
+                <li class="d-flex align-items-center">
+                    <i class="bx bx-sort me-50 font-medium-3"></i>
+                    <a th:href="@{/analiseTipos}" th:text="#{analiseTipo.edit.back}" class="btn btn-secondary"/>
+                </li>
+                <li class="d-flex align-items-center">
+                    <i class="bx bx-sort me-50 font-medium-3"></i>
+                    <a th:href="@{/analiseTipos/audit/{id}(id=${analiseTipo.id})}" th:text="#{audit.list}"
+                       class="btn btn-warning ms-2"/>
+                </li>
+            </ul>
         </div>
-    </body>
+        <div class="card-content">
+            <div th:replace="~{fragments/forms::globalErrors('analiseTipo')}"/>
+            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
+                <div class="card-body">
+                    <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='analiseTipo')}"/>
+                    <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='siglaAnaliseTipo')}"/>
+                    <div th:replace="~{fragments/forms::inputRow(object='analiseTipo', field='descricaoAnaliseTipo')}"/>
+                </div>
+                <div class="card-footer">
+                    <div class="col-sm-12 d-flex justify-content-start">
+                        <input type="submit" th:value="#{analiseTipo.edit.headline}" class="btn btn-success mt-4"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
 </html>
+
+
+

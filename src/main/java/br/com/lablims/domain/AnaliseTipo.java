@@ -11,6 +11,9 @@ import org.hibernate.envers.Audited;
 @Audited(withModifiedFlag = true)
 public class AnaliseTipo {
 
+    @Version
+    private Long version;
+
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +27,5 @@ public class AnaliseTipo {
 
     @Column
     private String descricaoAnaliseTipo;
-
-    @Version
-    private Long version;
 
 }

@@ -72,9 +72,6 @@ public class AnaliseTipoController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable final Integer id, final Model model) {
         model.addAttribute("analiseTipo", analiseTipoService.get(id));
-        AnaliseTipo analiseTipo = analiseTipoService.findById(id);
-        List<EntityRevision<AnaliseTipo>> revisoes = genericRevisionRepository.listaRevisoesById(analiseTipo.getId(), AnaliseTipo.class);
-        model.addAttribute("audits", revisoes);
         return "analiseTipo/edit";
     }
 
@@ -109,6 +106,20 @@ public class AnaliseTipoController {
         model.addAttribute("audits", revisoes);
         return "/analiseTipo/audit";
     }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        AnaliseTipo analiseTipo = analiseTipoService.findById(id);
+        List<EntityRevision<AnaliseTipo>> revisoes = genericRevisionRepository.listaRevisoesById(analiseTipo.getId(), AnaliseTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseTipo/audit";
+    }
+
+
+
+
+
+
 
 
 }
