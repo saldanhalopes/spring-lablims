@@ -14,4 +14,6 @@ public class MetodologiaStatusDTO {
     @Size(max = 255)
     private String status;
 
+    private Short version;
+
 }

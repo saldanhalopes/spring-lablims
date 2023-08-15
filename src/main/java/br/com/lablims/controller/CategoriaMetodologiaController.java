@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.CategoriaMetodologia;
 import br.com.lablims.model.CategoriaMetodologiaDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.CategoriaMetodologiaService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/categoriaMetodologias")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CategoriaMetodologiaController {
 
     private final CategoriaMetodologiaService categoriaMetodologiaService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public CategoriaMetodologiaController(
             final CategoriaMetodologiaService categoriaMetodologiaService) {
@@ -92,6 +101,21 @@ public class CategoriaMetodologiaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("categoriaMetodologia.delete.success"));
         }
         return "redirect:/categoriaMetodologias";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<CategoriaMetodologia>> revisoes = genericRevisionRepository.listaRevisoes(CategoriaMetodologia.class);
+        model.addAttribute("audits", revisoes);
+        return "/categoriaMetodologia/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        CategoriaMetodologia xxx = categoriaMetodologiaService.findById(id);
+        List<EntityRevision<CategoriaMetodologia>> revisoes = genericRevisionRepository.listaRevisoesById(xxx.getId(), CategoriaMetodologia.class);
+        model.addAttribute("audits", revisoes);
+        return "/categoriaMetodologia/audit";
     }
 
 }

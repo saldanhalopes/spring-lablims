@@ -1,11 +1,16 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Analise;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.model.AnaliseDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.AnaliseService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/analises")
@@ -28,6 +35,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AnaliseController {
 
     private final AnaliseService analiseService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public AnaliseController(final AnaliseService analiseService) {
         this.analiseService = analiseService;
@@ -89,6 +99,21 @@ public class AnaliseController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("analise.delete.success"));
         }
         return "redirect:/analises";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Analise>> revisoes = genericRevisionRepository.listaRevisoes(Analise.class);
+        model.addAttribute("audits", revisoes);
+        return "/analise/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Analise analise = analiseService.findById(id);
+        List<EntityRevision<Analise>> revisoes = genericRevisionRepository.listaRevisoesById(analise.getId(), Analise.class);
+        model.addAttribute("audits", revisoes);
+        return "/analise/audit";
     }
 
 }

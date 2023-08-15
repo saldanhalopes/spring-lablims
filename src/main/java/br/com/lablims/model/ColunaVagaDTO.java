@@ -18,4 +18,6 @@ public class ColunaVagaDTO {
 
     private Integer colunaStorage;
 
+    private Short version;
+
 }

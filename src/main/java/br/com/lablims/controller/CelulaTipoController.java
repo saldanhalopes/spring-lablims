@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.CelulaTipo;
 import br.com.lablims.model.CelulaTipoDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.CelulaTipoService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/celulaTipos")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CelulaTipoController {
 
     private final CelulaTipoService celulaTipoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public CelulaTipoController(final CelulaTipoService celulaTipoService) {
         this.celulaTipoService = celulaTipoService;
@@ -89,6 +98,21 @@ public class CelulaTipoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("celulaTipo.delete.success"));
         }
         return "redirect:/celulaTipos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<CelulaTipo>> revisoes = genericRevisionRepository.listaRevisoes(CelulaTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/celulaTipo/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        CelulaTipo celulaTipo = celulaTipoService.findById(id);
+        List<EntityRevision<CelulaTipo>> revisoes = genericRevisionRepository.listaRevisoesById(celulaTipo.getId(), CelulaTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/celulaTipo/audit";
     }
 
 }

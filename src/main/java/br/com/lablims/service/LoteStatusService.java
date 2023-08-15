@@ -27,6 +27,10 @@ public class LoteStatusService {
     private final AnaliseStatusRepository analiseStatusRepository;
     private final UsuarioRepository usuarioRepository;
 
+    public LoteStatus findById(Integer id){
+        return loteStatusRepository.findById(id).orElse(null);
+    }
+
     public LoteStatusService(final LoteStatusRepository loteStatusRepository,
             final LoteRepository loteRepository,
             final PlanoAnaliseRepository planoAnaliseRepository,
@@ -95,6 +99,7 @@ public class LoteStatusService {
         loteStatusDTO.setAnaliseStatus(loteStatus.getAnaliseStatus() == null ? null : loteStatus.getAnaliseStatus().getId());
         loteStatusDTO.setConferente1(loteStatus.getConferente1() == null ? null : loteStatus.getConferente1().getId());
         loteStatusDTO.setConferente2(loteStatus.getConferente2() == null ? null : loteStatus.getConferente2().getId());
+        loteStatusDTO.setVersion(loteStatus.getVersion());
         return loteStatusDTO;
     }
 

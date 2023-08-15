@@ -30,6 +30,10 @@ public class LoteService {
     private final CampanhaRepository campanhaRepository;
     private final LoteStatusRepository loteStatusRepository;
 
+    public Lote findById(Integer id){
+        return loteRepository.findById(id).orElse(null);
+    }
+
     public LoteService(final LoteRepository loteRepository,
             final MaterialRepository materialRepository,
             final AmostraTipoRepository amostraTipoRepository,
@@ -107,6 +111,7 @@ public class LoteService {
         loteDTO.setObs(lote.getObs());
         loteDTO.setMaterial(lote.getMaterial() == null ? null : lote.getMaterial().getId());
         loteDTO.setAmostraTipo(lote.getAmostraTipo() == null ? null : lote.getAmostraTipo().getId());
+        loteDTO.setVersion(lote.getVersion());
         return loteDTO;
     }
 

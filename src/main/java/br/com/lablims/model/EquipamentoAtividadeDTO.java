@@ -14,4 +14,6 @@ public class EquipamentoAtividadeDTO {
     @Size(max = 255)
     private String atividade;
 
+    private Short version;
+
 }

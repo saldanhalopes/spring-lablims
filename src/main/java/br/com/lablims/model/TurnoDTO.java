@@ -14,4 +14,6 @@ public class TurnoDTO {
     @Size(max = 255)
     private String turno;
 
+    private Short version;
+
 }

@@ -1,11 +1,14 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Campanha;
 import br.com.lablims.domain.Celula;
 import br.com.lablims.domain.Lote;
 import br.com.lablims.domain.Setor;
 import br.com.lablims.model.CampanhaDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.CelulaRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.LoteRepository;
 import br.com.lablims.repos.SetorRepository;
 import br.com.lablims.service.CampanhaService;
@@ -13,6 +16,7 @@ import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/campanhas")
@@ -39,6 +45,9 @@ public class CampanhaController {
     private final SetorRepository setorRepository;
     private final CelulaRepository celulaRepository;
     private final LoteRepository loteRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public CampanhaController(final CampanhaService campanhaService,
             final SetorRepository setorRepository, final CelulaRepository celulaRepository,
@@ -118,6 +127,22 @@ public class CampanhaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("campanha.delete.success"));
         }
         return "redirect:/campanhas";
+    }
+
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Campanha>> revisoes = genericRevisionRepository.listaRevisoes(Campanha.class);
+        model.addAttribute("audits", revisoes);
+        return "/campanha/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Campanha campanha = campanhaService.findById(id);
+        List<EntityRevision<Campanha>> revisoes = genericRevisionRepository.listaRevisoesById(campanha.getId(), Campanha.class);
+        model.addAttribute("audits", revisoes);
+        return "/campanha/audit";
     }
 
 }

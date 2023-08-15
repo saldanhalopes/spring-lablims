@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -14,15 +15,19 @@ public class LoteStatusDTO {
 
     private Integer id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataStatus;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataPrevisao;
 
-    @Schema(type = "string", example = "18:30")
-    private LocalTime dataProgramado;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataProgramado;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataConferencia1;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataConferencia2;
 
     @Size(max = 255)
@@ -37,5 +42,7 @@ public class LoteStatusDTO {
     private Integer conferente1;
 
     private Integer conferente2;
+
+    private Short version;
 
 }

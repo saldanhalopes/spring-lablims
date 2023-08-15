@@ -1,16 +1,20 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.ColunaStorage;
 import br.com.lablims.domain.ColunaStorageTipo;
 import br.com.lablims.domain.Setor;
 import br.com.lablims.model.ColunaStorageDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.ColunaStorageTipoRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.SetorRepository;
 import br.com.lablims.service.ColunaStorageService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/colunaStorages")
@@ -36,6 +42,9 @@ public class ColunaStorageController {
     private final ColunaStorageService colunaStorageService;
     private final SetorRepository setorRepository;
     private final ColunaStorageTipoRepository colunaStorageTipoRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ColunaStorageController(final ColunaStorageService colunaStorageService,
             final SetorRepository setorRepository,
@@ -112,6 +121,21 @@ public class ColunaStorageController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("colunaStorage.delete.success"));
         }
         return "redirect:/colunaStorages";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<ColunaStorage>> revisoes = genericRevisionRepository.listaRevisoes(ColunaStorage.class);
+        model.addAttribute("audits", revisoes);
+        return "/xxx/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        ColunaStorage colunaStorage = colunaStorageService.findById(id);
+        List<EntityRevision<ColunaStorage>> revisoes = genericRevisionRepository.listaRevisoesById(colunaStorage.getId(), ColunaStorage.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaStorage/audit";
     }
 
 }

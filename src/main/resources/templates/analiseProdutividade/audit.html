@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{analiseProdutividade.list.headline} + ' ' + Auditoria"/>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="card-title d-flex">
+                            <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
+                            <h2 th:text="#{analiseProdutividade.list.headline} + ' ' + Auditoria" class="flex-grow-1"/>
+                        </h4>
+                        <ul class="list-inline d-flex mb-0">
+                            <li class="d-flex align-items-center">
+                                <i class="bx bx-sort me-50 font-medium-3"></i>
+                                <a th:href="@{/analiseProdutividades}" th:text="#{analiseProdutividade.edit.back}" class="btn btn-secondary" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body mt-3">
+                        <div class="dataTable-wrapper table-responsive">
+                            <table class="table table-striped table-hover table-sm align-middle" id="tableAudit">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{analiseProdutividade.id.label}" scope="col"/><!-- FIX-->
+                                    <th th:text="#{audit.version}" scope="col"/><!-- FIX-->
+                                    <th th:text="#{audit.tipo}" scope="col"/><!-- FIX-->
+
+                                    <th th:text="#{analiseProdutividade.analiseProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.siglaProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.descricaoProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.corProdutividade.label}" scope="col" />
+
+                                    <th>Usuário</th><!-- FIX-->
+                                    <th>Data</th><!-- FIX-->
+                                    <th>Ip</th><!-- FIX-->
+                                    <th>Motivo</th><!-- FIX-->
+                                    <th>Revisao</th><!-- FIX-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="a:${audits}">
+                                   <td th:text="${a.getEntidade().getId()}"></td> <!-- FIX-->
+                                    <td th:text="${a.getEntidade().getVersion()}"></td><!-- FIX-->
+                                    <td th:text="${a.getRevisao().getRevType()}"></td><!-- FIX-->
+
+                                    <td th:text="${a.getEntidade().getAnaliseProdutividade()}"></td>
+                                    <td th:text="${a.getEntidade().getSiglaProdutividade()}"></td>
+                                    <td th:text="${a.getEntidade().getDescricaoProdutividade()}"></td>
+                                    <td th:text="${a.getEntidade().getCorProdutividade()}"></td>
+
+                                    <td th:text="${a.getRevisao().getUserName()}"></td><!-- FIX-->
+                                    <td th:text="${#dates.format(a.getRevisao().getRevisionDate(), 'dd/MM/yyyy HH:mm:ss')}"></td><!-- FIX-->
+                                    <td th:text="${a.getRevisao().getIp()}"></td><!-- FIX-->
+                                    <td th:text="${a.getRevisao().getMotivo()}"></td><!-- FIX-->
+                                    <td th:text="${a.getRevisao().getId()}"></td><!-- FIX-->
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th th:text="#{analiseProdutividade.id.label}" scope="col"/><!-- FIX-->
+                                    <th th:text="#{audit.version}" scope="col"/><!-- FIX-->
+                                    <th th:text="#{audit.tipo}" scope="col"/><!-- FIX-->
+
+                                    <th th:text="#{analiseProdutividade.analiseProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.siglaProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.descricaoProdutividade.label}" scope="col" />
+                                    <th th:text="#{analiseProdutividade.corProdutividade.label}" scope="col" />
+
+                                    <th>Usuário</th><!-- FIX-->
+                                    <th>Data</th><!-- FIX-->
+                                    <th>Ip</th><!-- FIX-->
+                                    <th>Motivo</th><!-- FIX-->
+                                    <th>Revisao</th><!-- FIX-->
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+<span layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#tableAudit').DataTable({
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        var column = this;
+                        var search = $(`<input class="form-control form-control-sm" type="text">`)
+                            .appendTo( $(column.footer()).empty() )
+                            .on( 'change input', function () {
+                                var val = $(this).val()
+
+                                column
+                                    .search( val ? val : '', true, false )
+                                    .draw();
+                            } );
+
+                    } );
+                }
+            });
+        });
+    </script>
+</span>
+</html>

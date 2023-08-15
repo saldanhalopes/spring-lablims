@@ -17,4 +17,6 @@ public class SolucaoTipoDTO {
     @Size(max = 255)
     private String tipoSolucao;
 
+    private Short version;
+
 }

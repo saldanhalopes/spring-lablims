@@ -1,50 +1,121 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{analise.list.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{analise.list.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/analises/add}" th:text="#{analise.list.createNew}" class="btn btn-primary ms-2" />
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{analise.list.headline}"/>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card widget-todo-item">
+                    <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                        <h4 class="card-title d-flex">
+                            <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
+                            <h2 th:text="#{analise.list.headline}" class="flex-grow-1"/>
+                        </h4>
+                        <ul class="list-inline d-flex mb-0">
+                            <li class="d-flex align-items-center">
+                                <i class="bx bx-check-circle font-medium-3 me-50"></i>
+                                <a th:href="@{/analises/add}" th:text="#{analise.list.createNew}"
+                                   class="btn btn-success ms-2"/>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="bx bx-sort me-50 ml-50 font-medium-3"></i>
+                                <a th:href="@{/parameters}" th:text="#{parameters.back}"
+                                   class="btn btn-secondary"/>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body mt-3">
+                        <div th:if="${analises.empty}" th:text="#{analise.list.empty}"/>
+                        <div th:if="${!analises.empty}" class="table-responsive">
+                            <table class="table table-striped table-hover align-middle table-sm" id="tableList">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{analise.id.label}" scope="col"/>
+                                    <th th:text="#{audit.version}" scope="col"/>
+                                    <th th:text="#{analise.analise.label}" scope="col"/>
+                                    <th th:text="#{analise.descricaoAnalise.label}" scope="col" />
+                                    <th th:text="#{analise.siglaAnalise.label}" scope="col" />
+                                    <th><!-- --></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="analise : ${analises}">
+                                    <td th:text="${analise.id}"/>
+                                    <td th:text="${analise.version}"/>
+                                    <td th:text="${analise.analise}" />
+                                    <td th:text="${analise.descricaoAnalise}" />
+                                    <td th:text="${analise.siglaAnalise}" />
+                                    <td>
+                                        <div class="float-end text-nowrap">
+                                            <a th:href="@{/analises/edit/{id}(id=${analise.id})}"
+                                               th:text="#{analise.list.edit}" class="btn btn-sm btn-info"/>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#myModal">
+                                                Deletar
+                                            </button>
+                                            <div id="myModal" class="modal fade text-left" tabindex="-1" role="dialog"
+                                                 aria-labelledby="modaDialog"
+                                                 style="display: none;" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                     role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel33"
+                                                                th:text="#{delete.header}"/>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <label th:text="#{delete.confirm}"></label>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">
+                                                                <i class="bx bx-x d-block d-sm-none"></i>
+                                                                <span class="d-none d-sm-block">Close</span>
+                                                            </button>
+                                                            <form th:action="@{/analises/delete/{id}(id=${analise.id})}"
+                                                                  method="post" class="d-inline">
+                                                                <button th:text="#{analise.list.delete}"
+                                                                        type="submit" class="btn btn-sm btn-danger"/>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div th:replace="~{fragments/utils::pagination()}"/>
+                        <div class="col-sm-12 d-flex justify-content-start">
+                            <a th:href="@{/analises/audit}" th:text="#{audit.list}" class="btn btn-warning ms-2"/>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div th:replace="~{fragments/utils::searchFilter(object='analise')}" />
-            <div th:if="${analises.empty}" th:text="#{analise.list.empty}" />
-            <div th:if="${!analises.empty}" class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th th:text="#{analise.id.label}" scope="col" />
-                            <th th:text="#{analise.analise.label}" scope="col" />
-                            <th th:text="#{analise.descricaoAnalise.label}" scope="col" />
-                            <th th:text="#{analise.siglaAnalise.label}" scope="col" />
-                            <th><!-- --></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="analise : ${analises}">
-                            <td th:text="${analise.id}" />
-                            <td th:text="${analise.analise}" />
-                            <td th:text="${analise.descricaoAnalise}" />
-                            <td th:text="${analise.siglaAnalise}" />
-                            <td>
-                                <div class="float-end text-nowrap">
-                                    <a th:href="@{/analises/edit/{id}(id=${analise.id})}" th:text="#{analise.list.edit}" class="btn btn-sm btn-info" />
-                                    <form th:action="@{/analises/delete/{id}(id=${analise.id})}"
-                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
-                                        <button th:text="#{analise.list.delete}" type="submit" class="btn btn-sm btn-danger" />
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:replace="~{fragments/utils::pagination()}" />
         </div>
-    </body>
+    </section>
+</div>
+</body>
+<span layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#tableList').DataTable({
+                "paging": false,
+                "info": false
+            });
+        });
+    </script>
+</span>
 </html>

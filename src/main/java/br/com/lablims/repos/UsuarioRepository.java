@@ -3,6 +3,8 @@ package br.com.lablims.repos;
 import br.com.lablims.domain.Grupo;
 import br.com.lablims.domain.Usuario;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -23,5 +25,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findAllByGrupos(Grupo grupo);
 
     Usuario findFirstByGrupos(Grupo grupo);
+
+    Optional<Usuario> findByUsername(String username);
 
 }

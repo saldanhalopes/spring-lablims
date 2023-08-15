@@ -22,6 +22,10 @@ public class MetodologiaService {
     private final CategoriaMetodologiaRepository categoriaMetodologiaRepository;
     private final MetodologiaVesaoRepository metodologiaVesaoRepository;
 
+    public Metodologia findById(Integer id){
+        return metodologiaRepository.findById(id).orElse(null);
+    }
+
     public MetodologiaService(final MetodologiaRepository metodologiaRepository,
             final CategoriaMetodologiaRepository categoriaMetodologiaRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository) {
@@ -80,6 +84,7 @@ public class MetodologiaService {
         metodologiaDTO.setMetodo(metodologia.getMetodo());
         metodologiaDTO.setObs(metodologia.getObs());
         metodologiaDTO.setCategoriaMetodologia(metodologia.getCategoriaMetodologia() == null ? null : metodologia.getCategoriaMetodologia().getId());
+        metodologiaDTO.setVersion(metodologia.getVersion());
         return metodologiaDTO;
     }
 

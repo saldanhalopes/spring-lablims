@@ -20,4 +20,6 @@ public class GrupoDTO {
     @Size(max = 255)
     private String regra;
 
+    private Short version;
+
 }

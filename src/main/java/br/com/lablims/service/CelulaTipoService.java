@@ -19,6 +19,10 @@ public class CelulaTipoService {
     private final CelulaTipoRepository celulaTipoRepository;
     private final CelulaRepository celulaRepository;
 
+    public CelulaTipo findById(Integer id){
+        return celulaTipoRepository.findById(id).orElse(null);
+    }
+
     public CelulaTipoService(final CelulaTipoRepository celulaTipoRepository,
             final CelulaRepository celulaRepository) {
         this.celulaTipoRepository = celulaTipoRepository;
@@ -71,6 +75,7 @@ public class CelulaTipoService {
     private CelulaTipoDTO mapToDTO(final CelulaTipo celulaTipo, final CelulaTipoDTO celulaTipoDTO) {
         celulaTipoDTO.setId(celulaTipo.getId());
         celulaTipoDTO.setTipo(celulaTipo.getTipo());
+        celulaTipoDTO.setVersion(celulaTipo.getVersion());
         return celulaTipoDTO;
     }
 

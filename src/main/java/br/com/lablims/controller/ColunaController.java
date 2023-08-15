@@ -1,14 +1,18 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Coluna;
 import br.com.lablims.domain.ColunaConfig;
 import br.com.lablims.model.ColunaDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.ColunaConfigRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.ColunaService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/colunas")
@@ -33,6 +39,9 @@ public class ColunaController {
 
     private final ColunaService colunaService;
     private final ColunaConfigRepository colunaConfigRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ColunaController(final ColunaService colunaService,
             final ColunaConfigRepository colunaConfigRepository) {
@@ -121,6 +130,21 @@ public class ColunaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("coluna.delete.success"));
         }
         return "redirect:/colunas";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Coluna>> revisoes = genericRevisionRepository.listaRevisoes(Coluna.class);
+        model.addAttribute("audits", revisoes);
+        return "/coluna/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Coluna coluna = colunaService.findById(id);
+        List<EntityRevision<Coluna>> revisoes = genericRevisionRepository.listaRevisoesById(coluna.getId(), Coluna.class);
+        model.addAttribute("audits", revisoes);
+        return "/coluna/audit";
     }
 
 }

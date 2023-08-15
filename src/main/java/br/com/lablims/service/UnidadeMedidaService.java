@@ -31,6 +31,10 @@ public class UnidadeMedidaService {
     private final SolucaoRegistroRepository solucaoRegistroRepository;
     private final SolucaoReagenteRepository solucaoReagenteRepository;
 
+    public UnidadeMedida findById(Integer id){
+        return unidadeMedidaRepository.findById(id).orElse(null);
+    }
+
     public UnidadeMedidaService(final UnidadeMedidaRepository unidadeMedidaRepository,
             final EscalaMedidaRepository escalaMedidaRepository,
             final PlanoAnaliseColunaRepository planoAnaliseColunaRepository,
@@ -93,6 +97,7 @@ public class UnidadeMedidaService {
         unidadeMedidaDTO.setId(unidadeMedida.getId());
         unidadeMedidaDTO.setUnidade(unidadeMedida.getUnidade());
         unidadeMedidaDTO.setEscalaMedida(unidadeMedida.getEscalaMedida() == null ? null : unidadeMedida.getEscalaMedida().getId());
+        unidadeMedidaDTO.setVersion(unidadeMedida.getVersion());
         return unidadeMedidaDTO;
     }
 

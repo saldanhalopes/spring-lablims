@@ -1,4 +1,4 @@
-package br.com.lablims.controller;
+package br.com.lablims.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -23,4 +23,6 @@ public class AnaliseProdutividadeDTO {
     @Size(max = 255)
     private String corProdutividade;
 
+    private Short version;
+
 }

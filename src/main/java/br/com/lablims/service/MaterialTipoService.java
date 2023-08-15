@@ -19,6 +19,10 @@ public class MaterialTipoService {
     private final MaterialTipoRepository materialTipoRepository;
     private final MaterialRepository materialRepository;
 
+    public MaterialTipo findById(Integer id){
+        return materialTipoRepository.findById(id).orElse(null);
+    }
+
     public MaterialTipoService(final MaterialTipoRepository materialTipoRepository,
             final MaterialRepository materialRepository) {
         this.materialTipoRepository = materialTipoRepository;
@@ -73,6 +77,7 @@ public class MaterialTipoService {
         materialTipoDTO.setId(materialTipo.getId());
         materialTipoDTO.setSigla(materialTipo.getSigla());
         materialTipoDTO.setTipo(materialTipo.getTipo());
+        materialTipoDTO.setVersion(materialTipo.getVersion());
         return materialTipoDTO;
     }
 

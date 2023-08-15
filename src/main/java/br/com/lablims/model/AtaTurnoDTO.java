@@ -25,4 +25,6 @@ public class AtaTurnoDTO {
 
     private List<Integer> equipamentos;
 
+    private Short version;
+
 }

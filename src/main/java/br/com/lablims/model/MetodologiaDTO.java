@@ -22,4 +22,6 @@ public class MetodologiaDTO {
 
     private Integer categoriaMetodologia;
 
+    private Short version;
+
 }

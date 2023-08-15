@@ -12,7 +12,7 @@ public class ColunaStorageDTO {
     private Integer id;
 
     @Size(max = 255)
-    private String numero;
+    private String codigo;
 
     @Size(max = 255)
     private String obs;
@@ -20,5 +20,7 @@ public class ColunaStorageDTO {
     private Integer setor;
 
     private Integer tipo;
+
+    private Short version;
 
 }

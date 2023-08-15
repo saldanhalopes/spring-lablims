@@ -28,4 +28,6 @@ public class PlanoAnaliseDTO {
 
     private Integer setor;
 
+    private Short version;
+
 }

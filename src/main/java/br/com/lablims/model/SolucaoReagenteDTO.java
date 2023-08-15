@@ -1,9 +1,11 @@
 package br.com.lablims.model;
 
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -20,12 +22,15 @@ public class SolucaoReagenteDTO {
     @Size(max = 255)
     private String fabricante;
 
-    private LocalDateTime validade;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate validade;
 
     private Integer solucaoRegistro;
 
     private Integer reagente;
 
     private Integer unidade;
+
+    private Short version;
 
 }

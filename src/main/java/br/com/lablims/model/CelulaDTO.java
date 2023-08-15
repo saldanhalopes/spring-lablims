@@ -24,4 +24,6 @@ public class CelulaDTO {
 
     private Integer tipo;
 
+    private Short version;
+
 }

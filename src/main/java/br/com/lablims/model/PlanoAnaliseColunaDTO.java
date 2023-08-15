@@ -22,4 +22,6 @@ public class PlanoAnaliseColunaDTO {
 
     private Integer unidade;
 
+    private Short version;
+
 }

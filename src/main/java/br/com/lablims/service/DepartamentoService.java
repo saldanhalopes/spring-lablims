@@ -19,6 +19,10 @@ public class DepartamentoService {
     private final DepartamentoRepository departamentoRepository;
     private final SetorRepository setorRepository;
 
+    public Departamento findById(Integer id){
+        return departamentoRepository.findById(id).orElse(null);
+    }
+
     public DepartamentoService(final DepartamentoRepository departamentoRepository,
             final SetorRepository setorRepository) {
         this.departamentoRepository = departamentoRepository;
@@ -74,6 +78,7 @@ public class DepartamentoService {
         departamentoDTO.setDepartamento(departamento.getDepartamento());
         departamentoDTO.setSiglaDepartamento(departamento.getSiglaDepartamento());
         departamentoDTO.setDescricao(departamento.getDescricao());
+        departamentoDTO.setVersion(departamento.getVersion());
         return departamentoDTO;
     }
 

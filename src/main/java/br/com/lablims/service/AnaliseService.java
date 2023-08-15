@@ -25,6 +25,10 @@ public class AnaliseService {
     private final ColunaLogRepository colunaLogRepository;
     private final PlanoAnaliseRepository planoAnaliseRepository;
 
+    public Analise findById(Integer id){
+        return analiseRepository.findById(id).orElse(null);
+    }
+
     public AnaliseService(final AnaliseRepository analiseRepository,
             final ColunaUtilRepository colunaUtilRepository,
             final ColunaLogRepository colunaLogRepository,
@@ -83,6 +87,7 @@ public class AnaliseService {
         analiseDTO.setAnalise(analise.getAnalise());
         analiseDTO.setDescricaoAnalise(analise.getDescricaoAnalise());
         analiseDTO.setSiglaAnalise(analise.getSiglaAnalise());
+        analiseDTO.setVersion(analise.getVersion());
         return analiseDTO;
     }
 

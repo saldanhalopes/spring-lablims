@@ -1,11 +1,16 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.AnaliseTipo;
+import br.com.lablims.domain.Arquivos;
 import br.com.lablims.model.ArquivosDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.ArquivosService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/arquivoss")
@@ -28,6 +35,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ArquivosController {
 
     private final ArquivosService arquivosService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ArquivosController(final ArquivosService arquivosService) {
         this.arquivosService = arquivosService;
@@ -89,6 +99,21 @@ public class ArquivosController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("arquivos.delete.success"));
         }
         return "redirect:/arquivoss";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Arquivos>> revisoes = genericRevisionRepository.listaRevisoes(Arquivos.class);
+        model.addAttribute("audits", revisoes);
+        return "/arquivos/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Arquivos arquivos = arquivosService.findById(id);
+        List<EntityRevision<Arquivos>> revisoes = genericRevisionRepository.listaRevisoesById(arquivos.getId(), Arquivos.class);
+        model.addAttribute("audits", revisoes);
+        return "/arquivos/audit";
     }
 
 }

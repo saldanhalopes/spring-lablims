@@ -19,4 +19,5 @@ public class SolucaoParemetroDTO {
 
     private Integer solucaoRegistro;
 
+    private Short version;
 }

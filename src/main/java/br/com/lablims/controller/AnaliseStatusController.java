@@ -1,14 +1,19 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
 import br.com.lablims.domain.AnaliseProdutividade;
+import br.com.lablims.domain.AnaliseStatus;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.model.AnaliseStatusDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.AnaliseProdutividadeRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.AnaliseStatusService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/analiseStatuss")
@@ -32,6 +39,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AnaliseStatusController {
 
     private final AnaliseStatusService analiseStatusService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+
     private final AnaliseProdutividadeRepository analiseProdutividadeRepository;
 
     public AnaliseStatusController(final AnaliseStatusService analiseStatusService,
@@ -104,6 +115,21 @@ public class AnaliseStatusController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("analiseStatus.delete.success"));
         }
         return "redirect:/analiseStatuss";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<AnaliseStatus>> revisoes = genericRevisionRepository.listaRevisoes(AnaliseStatus.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseStatus/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        AnaliseStatus analiseStatus = analiseStatusService.findById(id);
+        List<EntityRevision<AnaliseStatus>> revisoes = genericRevisionRepository.listaRevisoesById(analiseStatus.getId(), AnaliseStatus.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseStatus/audit";
     }
 
 }

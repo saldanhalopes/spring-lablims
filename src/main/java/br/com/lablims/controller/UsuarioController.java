@@ -1,6 +1,7 @@
 package br.com.lablims.controller;
 
 import br.com.lablims.domain.Grupo;
+import br.com.lablims.domain.Usuario;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.UsuarioDTO;
 import br.com.lablims.repos.GrupoRepository;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
+import java.util.Optional;
 
 
 @Controller
@@ -120,6 +126,13 @@ public class UsuarioController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("usuario.delete.success"));
         }
         return "redirect:/usuarios";
+    }
+
+    @GetMapping("/validar")
+    public void validarSenha(Principal principal, @RequestParam String pass){
+        Usuario currentUsuario = usuarioService.findByUsername(principal.getName());
+        boolean valid =  usuarioService.validarUser(currentUsuario, pass);
+        System.out.println(valid);
     }
 
 }

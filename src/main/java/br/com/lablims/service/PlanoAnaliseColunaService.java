@@ -24,6 +24,10 @@ public class PlanoAnaliseColunaService {
     private final ColunaRepository colunaRepository;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
 
+    public PlanoAnaliseColuna findById(Integer id){
+        return planoAnaliseColunaRepository.findById(id).orElse(null);
+    }
+
     public PlanoAnaliseColunaService(
             final PlanoAnaliseColunaRepository planoAnaliseColunaRepository,
             final PlanoAnaliseRepository planoAnaliseRepository,
@@ -86,6 +90,7 @@ public class PlanoAnaliseColunaService {
         planoAnaliseColunaDTO.setPlanoAnalise(planoAnaliseColuna.getPlanoAnalise() == null ? null : planoAnaliseColuna.getPlanoAnalise().getId());
         planoAnaliseColunaDTO.setColuna(planoAnaliseColuna.getColuna() == null ? null : planoAnaliseColuna.getColuna().getId());
         planoAnaliseColunaDTO.setUnidade(planoAnaliseColuna.getUnidade() == null ? null : planoAnaliseColuna.getUnidade().getId());
+        planoAnaliseColunaDTO.setVersion(planoAnaliseColuna.getVersion());
         return planoAnaliseColunaDTO;
     }
 

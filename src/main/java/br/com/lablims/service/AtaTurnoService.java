@@ -32,6 +32,10 @@ public class AtaTurnoService {
     private final UsuarioRepository usuarioRepository;
     private final EquipamentoRepository equipamentoRepository;
 
+    public AtaTurno findById(Integer id){
+        return ataTurnoRepository.findById(id).orElse(null);
+    }
+
     public AtaTurnoService(final AtaTurnoRepository ataTurnoRepository,
             final TurnoRepository turnoRepository, final SetorRepository setorRepository,
             final UsuarioRepository usuarioRepository,
@@ -93,6 +97,7 @@ public class AtaTurnoService {
         ataTurnoDTO.setTurno(ataTurno.getTurno() == null ? null : ataTurno.getTurno().getId());
         ataTurnoDTO.setSetor(ataTurno.getSetor() == null ? null : ataTurno.getSetor().getId());
         ataTurnoDTO.setUsuario(ataTurno.getUsuario() == null ? null : ataTurno.getUsuario().getId());
+        ataTurnoDTO.setVersion(ataTurno.getVersion());
         ataTurnoDTO.setEquipamentos(ataTurno.getEquipamentos().stream()
                 .map(equipamento -> equipamento.getId())
                 .toList());

@@ -19,6 +19,10 @@ public class CategoriaMetodologiaService {
     private final CategoriaMetodologiaRepository categoriaMetodologiaRepository;
     private final MetodologiaRepository metodologiaRepository;
 
+    public CategoriaMetodologia findById(Integer id){
+        return categoriaMetodologiaRepository.findById(id).orElse(null);
+    }
+
     public CategoriaMetodologiaService(
             final CategoriaMetodologiaRepository categoriaMetodologiaRepository,
             final MetodologiaRepository metodologiaRepository) {
@@ -74,6 +78,7 @@ public class CategoriaMetodologiaService {
             final CategoriaMetodologiaDTO categoriaMetodologiaDTO) {
         categoriaMetodologiaDTO.setId(categoriaMetodologia.getId());
         categoriaMetodologiaDTO.setCategoria(categoriaMetodologia.getCategoria());
+        categoriaMetodologiaDTO.setVersion(categoriaMetodologia.getVersion());
         return categoriaMetodologiaDTO;
     }
 

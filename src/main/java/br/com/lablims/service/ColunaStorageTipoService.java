@@ -19,6 +19,10 @@ public class ColunaStorageTipoService {
     private final ColunaStorageTipoRepository colunaStorageTipoRepository;
     private final ColunaStorageRepository colunaStorageRepository;
 
+    public ColunaStorageTipo findById(Integer id){
+        return colunaStorageTipoRepository.findById(id).orElse(null);
+    }
+
     public ColunaStorageTipoService(final ColunaStorageTipoRepository colunaStorageTipoRepository,
             final ColunaStorageRepository colunaStorageRepository) {
         this.colunaStorageTipoRepository = colunaStorageTipoRepository;
@@ -72,6 +76,7 @@ public class ColunaStorageTipoService {
             final ColunaStorageTipoDTO colunaStorageTipoDTO) {
         colunaStorageTipoDTO.setId(colunaStorageTipo.getId());
         colunaStorageTipoDTO.setTipo(colunaStorageTipo.getTipo());
+        colunaStorageTipoDTO.setVersion(colunaStorageTipo.getVersion());
         return colunaStorageTipoDTO;
     }
 

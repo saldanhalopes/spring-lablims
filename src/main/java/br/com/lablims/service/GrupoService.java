@@ -21,6 +21,10 @@ public class GrupoService {
     private final GrupoRepository grupoRepository;
     private final UsuarioRepository usuarioRepository;
 
+    public Grupo findById(Integer id){
+        return grupoRepository.findById(id).orElse(null);
+    }
+
     public GrupoService(final GrupoRepository grupoRepository,
             final UsuarioRepository usuarioRepository) {
         this.grupoRepository = grupoRepository;
@@ -80,6 +84,7 @@ public class GrupoService {
         grupoDTO.setGrupo(grupo.getGrupo());
         grupoDTO.setTipo(grupo.getTipo());
         grupoDTO.setRegra(grupo.getRegra());
+        grupoDTO.setVersion(grupo.getVersion());
         return grupoDTO;
     }
 

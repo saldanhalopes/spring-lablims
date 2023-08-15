@@ -19,6 +19,10 @@ public class EquipamentoAtividadeService {
     private final EquipamentoAtividadeRepository equipamentoAtividadeRepository;
     private final EquipamentoLogRepository equipamentoLogRepository;
 
+    public EquipamentoAtividade findById(Integer id){
+        return equipamentoAtividadeRepository.findById(id).orElse(null);
+    }
+
     public EquipamentoAtividadeService(
             final EquipamentoAtividadeRepository equipamentoAtividadeRepository,
             final EquipamentoLogRepository equipamentoLogRepository) {
@@ -74,6 +78,7 @@ public class EquipamentoAtividadeService {
             final EquipamentoAtividadeDTO equipamentoAtividadeDTO) {
         equipamentoAtividadeDTO.setId(equipamentoAtividade.getId());
         equipamentoAtividadeDTO.setAtividade(equipamentoAtividade.getAtividade());
+        equipamentoAtividadeDTO.setVersion(equipamentoAtividade.getVersion());
         return equipamentoAtividadeDTO;
     }
 

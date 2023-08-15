@@ -17,4 +17,6 @@ public class MaterialTipoDTO {
     @Size(max = 255)
     private String tipo;
 
+    private Short version;
+
 }

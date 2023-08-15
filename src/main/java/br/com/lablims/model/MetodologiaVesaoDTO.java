@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -13,8 +14,10 @@ public class MetodologiaVesaoDTO {
 
     private Integer id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataRevisao;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataProximaRevisao;
 
     @Size(max = 255)
@@ -27,5 +30,7 @@ public class MetodologiaVesaoDTO {
     private List<Integer> material;
 
     private Integer status;
+
+    private Short version;
 
 }

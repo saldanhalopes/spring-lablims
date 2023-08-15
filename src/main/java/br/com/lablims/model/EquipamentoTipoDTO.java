@@ -14,4 +14,6 @@ public class EquipamentoTipoDTO {
     @Size(max = 255)
     private String tipo;
 
+    private Short version;
+
 }

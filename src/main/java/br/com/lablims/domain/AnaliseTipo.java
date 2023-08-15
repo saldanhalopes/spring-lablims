@@ -12,7 +12,7 @@ import org.hibernate.envers.Audited;
 public class AnaliseTipo {
 
     @Version
-    private Long version;
+    private Short version;
 
     @Id
     @Column(nullable = false, updatable = false)

@@ -1,20 +1,16 @@
 package br.com.lablims.controller;
 
-import br.com.lablims.domain.Equipamento;
-import br.com.lablims.domain.Setor;
-import br.com.lablims.domain.Turno;
-import br.com.lablims.domain.Usuario;
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.*;
 import br.com.lablims.model.AtaTurnoDTO;
 import br.com.lablims.model.SimplePage;
-import br.com.lablims.repos.EquipamentoRepository;
-import br.com.lablims.repos.SetorRepository;
-import br.com.lablims.repos.TurnoRepository;
-import br.com.lablims.repos.UsuarioRepository;
+import br.com.lablims.repos.*;
 import br.com.lablims.service.AtaTurnoService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/ataTurnos")
@@ -42,6 +40,9 @@ public class AtaTurnoController {
     private final SetorRepository setorRepository;
     private final UsuarioRepository usuarioRepository;
     private final EquipamentoRepository equipamentoRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public AtaTurnoController(final AtaTurnoService ataTurnoService,
             final TurnoRepository turnoRepository, final SetorRepository setorRepository,
@@ -121,6 +122,21 @@ public class AtaTurnoController {
         ataTurnoService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("ataTurno.delete.success"));
         return "redirect:/ataTurnos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<AtaTurno>> revisoes = genericRevisionRepository.listaRevisoes(AtaTurno.class);
+        model.addAttribute("audits", revisoes);
+        return "/ataTurno/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        AtaTurno ataTurno = ataTurnoService.findById(id);
+        List<EntityRevision<AtaTurno>> revisoes = genericRevisionRepository.listaRevisoesById(ataTurno.getId(), AtaTurno.class);
+        model.addAttribute("audits", revisoes);
+        return "/ataTurno/audit";
     }
 
 }

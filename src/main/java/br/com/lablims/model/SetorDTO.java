@@ -25,4 +25,6 @@ public class SetorDTO {
 
     private Integer departamento;
 
+    private Short version;
+
 }

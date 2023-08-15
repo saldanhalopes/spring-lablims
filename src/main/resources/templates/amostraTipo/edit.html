@@ -1,22 +1,43 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{amostraTipo.edit.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{amostraTipo.edit.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/amostraTipos}" th:text="#{amostraTipo.edit.back}" class="btn btn-secondary" />
-                </div>
-            </div>
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{amostraTipo.edit.headline}" />
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="card">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+            <h4 class="card-title d-flex">
+                <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
+                <h1 th:text="#{amostraTipo.edit.headline}" class="flex-grow-1"/>
+            </h4>
+            <ul class="list-inline d-flex mb-0">
+                <li class="d-flex align-items-center">
+                    <i class="bx bx-sort me-50 font-medium-3"></i>
+                    <a th:href="@{/amostraTipos}" th:text="#{amostraTipo.edit.back}" class="btn btn-secondary"/>
+                </li>
+                <li class="d-flex align-items-center">
+                    <i class="bx bx-sort me-50 font-medium-3"></i>
+                    <a th:href="@{/amostraTipos/audit/{id}(id=${amostraTipo.id})}" th:text="#{audit.list}"
+                       class="btn btn-warning ms-2"/>
+                </li>
+            </ul>
+        </div>
+        <div class="card-content">
             <div th:replace="~{fragments/forms::globalErrors('amostraTipo')}" />
             <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='amostraTipo', field='tipo')}" />
-                <input type="submit" th:value="#{amostraTipo.edit.headline}" class="btn btn-primary mt-4" />
+                <div class="card-body">
+                    <div th:replace="~{fragments/forms::inputRow(object='amostraTipo', field='tipo')}" />
+                </div>
+                <div class="card-footer">
+                    <div class="col-sm-12 d-flex justify-content-start">
+                        <input type="submit" th:value="#{amostraTipo.edit.headline}" class="btn btn-success mt-4"/>
+                    </div>
+                </div>
             </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

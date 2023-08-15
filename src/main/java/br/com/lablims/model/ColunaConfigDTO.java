@@ -20,4 +20,6 @@ public class ColunaConfigDTO {
     @Size(max = 255)
     private String descricao;
 
+    private Short version;
+
 }

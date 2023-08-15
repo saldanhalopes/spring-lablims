@@ -42,6 +42,10 @@ public class ColunaUtilService {
     private final ArquivosRepository arquivosRepository;
     private final ColunaLogRepository colunaLogRepository;
 
+    public ColunaUtil findById(Integer id){
+        return colunaUtilRepository.findById(id).orElse(null);
+    }
+
     public ColunaUtilService(final ColunaUtilRepository colunaUtilRepository,
             final ColunaRepository colunaRepository, final SetorRepository setorRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository,
@@ -117,6 +121,7 @@ public class ColunaUtilService {
         colunaUtilDTO.setAnalise(colunaUtil.getAnalise() == null ? null : colunaUtil.getAnalise().getId());
         colunaUtilDTO.setColunaVaga(colunaUtil.getColunaVaga() == null ? null : colunaUtil.getColunaVaga().getId());
         colunaUtilDTO.setCertificado(colunaUtil.getCertificado() == null ? null : colunaUtil.getCertificado().getId());
+        colunaUtilDTO.setVersion(colunaUtil.getVersion());
         colunaUtilDTO.setAnexos(colunaUtil.getAnexos().stream()
                 .map(arquivos -> arquivos.getId())
                 .toList());

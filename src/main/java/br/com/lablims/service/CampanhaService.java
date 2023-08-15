@@ -33,6 +33,10 @@ public class CampanhaService {
     private final LoteRepository loteRepository;
     private final ColunaLogRepository colunaLogRepository;
 
+    public Campanha findById(Integer id){
+        return campanhaRepository.findById(id).orElse(null);
+    }
+
     public CampanhaService(final CampanhaRepository campanhaRepository,
             final SetorRepository setorRepository, final CelulaRepository celulaRepository,
             final LoteRepository loteRepository, final ColunaLogRepository colunaLogRepository) {
@@ -98,6 +102,7 @@ public class CampanhaService {
         campanhaDTO.setPrioridade(campanha.getPrioridade());
         campanhaDTO.setSetor(campanha.getSetor() == null ? null : campanha.getSetor().getId());
         campanhaDTO.setCelula(campanha.getCelula() == null ? null : campanha.getCelula().getId());
+        campanhaDTO.setVersion(campanha.getVersion());
         campanhaDTO.setLotes(campanha.getLotes().stream()
                 .map(lote -> lote.getId())
                 .toList());

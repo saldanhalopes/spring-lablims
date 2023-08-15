@@ -1,24 +1,16 @@
 package br.com.lablims.controller;
 
-import br.com.lablims.domain.Analise;
-import br.com.lablims.domain.Arquivos;
-import br.com.lablims.domain.Campanha;
-import br.com.lablims.domain.ColunaUtil;
-import br.com.lablims.domain.Equipamento;
-import br.com.lablims.domain.Usuario;
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.*;
 import br.com.lablims.model.ColunaLogDTO;
 import br.com.lablims.model.SimplePage;
-import br.com.lablims.repos.AnaliseRepository;
-import br.com.lablims.repos.ArquivosRepository;
-import br.com.lablims.repos.CampanhaRepository;
-import br.com.lablims.repos.ColunaUtilRepository;
-import br.com.lablims.repos.EquipamentoRepository;
-import br.com.lablims.repos.UsuarioRepository;
+import br.com.lablims.repos.*;
 import br.com.lablims.service.ColunaLogService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/colunaLogs")
@@ -48,6 +42,9 @@ public class ColunaLogController {
     private final AnaliseRepository analiseRepository;
     private final EquipamentoRepository equipamentoRepository;
     private final ArquivosRepository arquivosRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ColunaLogController(final ColunaLogService colunaLogService,
             final ColunaUtilRepository colunaUtilRepository,
@@ -140,6 +137,20 @@ public class ColunaLogController {
         colunaLogService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("colunaLog.delete.success"));
         return "redirect:/colunaLogs";
+    }
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<ColunaLog>> revisoes = genericRevisionRepository.listaRevisoes(ColunaLog.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaLog/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        ColunaLog colunaLog = colunaLogService.findById(id);
+        List<EntityRevision<ColunaLog>> revisoes = genericRevisionRepository.listaRevisoesById(colunaLog.getId(), ColunaLog.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaLog/audit";
     }
 
 }

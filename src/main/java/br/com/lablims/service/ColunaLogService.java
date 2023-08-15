@@ -33,6 +33,10 @@ public class ColunaLogService {
     private final EquipamentoRepository equipamentoRepository;
     private final ArquivosRepository arquivosRepository;
 
+    public ColunaLog findById(Integer id){
+        return colunaLogRepository.findById(id).orElse(null);
+    }
+
     public ColunaLogService(final ColunaLogRepository colunaLogRepository,
             final ColunaUtilRepository colunaUtilRepository,
             final UsuarioRepository usuarioRepository, final CampanhaRepository campanhaRepository,
@@ -106,6 +110,7 @@ public class ColunaLogService {
         colunaLogDTO.setAnalise(colunaLog.getAnalise() == null ? null : colunaLog.getAnalise().getId());
         colunaLogDTO.setEquipamento(colunaLog.getEquipamento() == null ? null : colunaLog.getEquipamento().getId());
         colunaLogDTO.setAnexo(colunaLog.getAnexo() == null ? null : colunaLog.getAnexo().getId());
+        colunaLogDTO.setVersion(colunaLog.getVersion());
         return colunaLogDTO;
     }
 

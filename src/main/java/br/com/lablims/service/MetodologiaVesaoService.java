@@ -39,6 +39,10 @@ public class MetodologiaVesaoService {
     private final ColunaUtilRepository colunaUtilRepository;
     private final PlanoAnaliseRepository planoAnaliseRepository;
 
+    public MetodologiaVesao findById(Integer id){
+        return metodologiaVesaoRepository.findById(id).orElse(null);
+    }
+
     public MetodologiaVesaoService(final MetodologiaVesaoRepository metodologiaVesaoRepository,
             final MetodologiaRepository metodologiaRepository,
             final ArquivosRepository arquivosRepository,
@@ -106,6 +110,7 @@ public class MetodologiaVesaoService {
         metodologiaVesaoDTO.setObs(metodologiaVesao.getObs());
         metodologiaVesaoDTO.setMetodologia(metodologiaVesao.getMetodologia() == null ? null : metodologiaVesao.getMetodologia().getId());
         metodologiaVesaoDTO.setAnexo(metodologiaVesao.getAnexo() == null ? null : metodologiaVesao.getAnexo().getId());
+        metodologiaVesaoDTO.setVersion(metodologiaVesao.getVersion());
         metodologiaVesaoDTO.setMaterial(metodologiaVesao.getMaterial().stream()
                 .map(material -> material.getId())
                 .toList());

@@ -18,6 +18,10 @@ public class SolucaoEquipamentoService {
     private final SolucaoEquipamentoRepository solucaoEquipamentoRepository;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
 
+    public SolucaoEquipamento findById(Integer id){
+        return solucaoEquipamentoRepository.findById(id).orElse(null);
+    }
+
     public SolucaoEquipamentoService(
             final SolucaoEquipamentoRepository solucaoEquipamentoRepository,
             final SolucaoRegistroRepository solucaoRegistroRepository) {
@@ -72,6 +76,7 @@ public class SolucaoEquipamentoService {
             final SolucaoEquipamentoDTO solucaoEquipamentoDTO) {
         solucaoEquipamentoDTO.setId(solucaoEquipamento.getId());
         solucaoEquipamentoDTO.setSolucaoRegistro(solucaoEquipamento.getSolucaoRegistro() == null ? null : solucaoEquipamento.getSolucaoRegistro().getId());
+        solucaoEquipamentoDTO.setVersion(solucaoEquipamento.getVersion());
         return solucaoEquipamentoDTO;
     }
 

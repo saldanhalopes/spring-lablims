@@ -25,6 +25,10 @@ public class ColunaStorageService {
     private final ColunaStorageTipoRepository colunaStorageTipoRepository;
     private final ColunaVagaRepository colunaVagaRepository;
 
+    public ColunaStorage findById(Integer id){
+        return colunaStorageRepository.findById(id).orElse(null);
+    }
+
     public ColunaStorageService(final ColunaStorageRepository colunaStorageRepository,
             final SetorRepository setorRepository,
             final ColunaStorageTipoRepository colunaStorageTipoRepository,
@@ -81,16 +85,17 @@ public class ColunaStorageService {
     private ColunaStorageDTO mapToDTO(final ColunaStorage colunaStorage,
             final ColunaStorageDTO colunaStorageDTO) {
         colunaStorageDTO.setId(colunaStorage.getId());
-        colunaStorageDTO.setNumero(colunaStorage.getNumero());
+        colunaStorageDTO.setCodigo(colunaStorage.getCodigo());
         colunaStorageDTO.setObs(colunaStorage.getObs());
         colunaStorageDTO.setSetor(colunaStorage.getSetor() == null ? null : colunaStorage.getSetor().getId());
         colunaStorageDTO.setTipo(colunaStorage.getTipo() == null ? null : colunaStorage.getTipo().getId());
+        colunaStorageDTO.setVersion(colunaStorage.getVersion());
         return colunaStorageDTO;
     }
 
     private ColunaStorage mapToEntity(final ColunaStorageDTO colunaStorageDTO,
             final ColunaStorage colunaStorage) {
-        colunaStorage.setNumero(colunaStorageDTO.getNumero());
+        colunaStorage.setCodigo(colunaStorageDTO.getCodigo());
         colunaStorage.setObs(colunaStorageDTO.getObs());
         final Setor setor = colunaStorageDTO.getSetor() == null ? null : setorRepository.findById(colunaStorageDTO.getSetor())
                 .orElseThrow(() -> new NotFoundException("setor not found"));

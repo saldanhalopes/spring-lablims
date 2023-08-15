@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -26,10 +27,13 @@ public class SolucaoRegistroDTO {
     @Size(max = 255)
     private String armazenamento;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataPreparo;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataValidade;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataConferencia;
 
     private Double qtd;
@@ -46,5 +50,7 @@ public class SolucaoRegistroDTO {
     private Integer conferente;
 
     private Integer unidade;
+
+    private Short version;
 
 }

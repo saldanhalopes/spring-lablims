@@ -20,4 +20,6 @@ public class DepartamentoDTO {
     @Size(max = 255)
     private String descricao;
 
+    private Short version;
+
 }

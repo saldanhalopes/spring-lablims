@@ -18,4 +18,6 @@ public class PlanoAnaliseReagenteDTO {
 
     private Integer reagente;
 
+    private Short version;
+
 }

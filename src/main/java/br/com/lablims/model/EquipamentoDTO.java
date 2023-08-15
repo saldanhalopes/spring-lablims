@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -27,8 +28,10 @@ public class EquipamentoDTO {
     @Size(max = 255)
     private String modelo;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ultimaCalibracao;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime proximaCalibracao;
 
     private Boolean ativo;
@@ -36,7 +39,7 @@ public class EquipamentoDTO {
     @Size(max = 255)
     private String obs;
 
-    private Long imagem;
+    private byte[] imagem;
 
     @Size(max = 255)
     private String serialNumber;
@@ -52,5 +55,7 @@ public class EquipamentoDTO {
     private Integer procedimento;
 
     private Integer escala;
+
+    private Short version;
 
 }

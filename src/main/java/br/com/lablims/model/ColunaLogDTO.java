@@ -3,6 +3,9 @@ package br.com.lablims.model;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -11,23 +14,19 @@ public class ColunaLogDTO {
 
     private Integer id;
 
-    @Size(max = 255)
-    private String dataIncio;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataIncio;
 
-    @Size(max = 255)
-    private String dataFim;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dataFim;
 
-    @Size(max = 255)
     private String sentido;
 
-    @Size(max = 255)
     private String precoluna;
 
-    @Size(max = 255)
     private String prefiltro;
 
-    @Size(max = 255)
-    private String injecoes;
+    private Integer injecoes;
 
     private Integer colunaUtil;
 
@@ -42,5 +41,7 @@ public class ColunaLogDTO {
     private Integer equipamento;
 
     private Integer anexo;
+
+    private Short version;
 
 }

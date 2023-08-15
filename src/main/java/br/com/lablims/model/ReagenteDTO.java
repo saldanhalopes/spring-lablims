@@ -63,4 +63,6 @@ public class ReagenteDTO {
 
     private Integer fds;
 
+    private Short version;
+
 }

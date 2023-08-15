@@ -16,4 +16,6 @@ public class UnidadeMedidaDTO {
 
     private Integer escalaMedida;
 
+    private Short version;
+
 }

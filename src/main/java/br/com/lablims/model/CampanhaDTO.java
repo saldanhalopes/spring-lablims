@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -13,12 +14,16 @@ public class CampanhaDTO {
 
     private Integer id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime previsaoInicio;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime previsaoFim;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataInicio;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataFim;
 
     @Size(max = 255)
@@ -38,5 +43,7 @@ public class CampanhaDTO {
     private Integer celula;
 
     private List<Integer> lotes;
+
+    private Short version;
 
 }

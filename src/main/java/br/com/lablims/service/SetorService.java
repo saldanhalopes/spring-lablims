@@ -37,6 +37,10 @@ public class SetorService {
     private final AtaTurnoRepository ataTurnoRepository;
     private final PlanoAnaliseRepository planoAnaliseRepository;
 
+    public Setor findById(Integer id){
+        return setorRepository.findById(id).orElse(null);
+    }
+
     public SetorService(final SetorRepository setorRepository,
             final DepartamentoRepository departamentoRepository,
             final ColunaStorageRepository colunaStorageRepository,
@@ -105,6 +109,7 @@ public class SetorService {
         setorDTO.setDescricao(setor.getDescricao());
         setorDTO.setTipo(setor.getTipo());
         setorDTO.setDepartamento(setor.getDepartamento() == null ? null : setor.getDepartamento().getId());
+        setorDTO.setVersion(setor.getVersion());
         return setorDTO;
     }
 

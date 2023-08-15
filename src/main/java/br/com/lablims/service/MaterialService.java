@@ -27,6 +27,10 @@ public class MaterialService {
     private final MetodologiaVesaoRepository metodologiaVesaoRepository;
     private final LoteRepository loteRepository;
 
+    public Material findById(Integer id){
+        return materialRepository.findById(id).orElse(null);
+    }
+
     public MaterialService(final MaterialRepository materialRepository,
             final MaterialTipoRepository materialTipoRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository,
@@ -92,6 +96,7 @@ public class MaterialService {
         materialDTO.setItem(material.getItem());
         materialDTO.setMaterial(material.getMaterial());
         materialDTO.setTipoMaterial(material.getTipoMaterial() == null ? null : material.getTipoMaterial().getId());
+        materialDTO.setVersion(material.getVersion());
         return materialDTO;
     }
 

@@ -22,6 +22,10 @@ public class ColunaVagaService {
     private final ColunaStorageRepository colunaStorageRepository;
     private final ColunaUtilRepository colunaUtilRepository;
 
+    public ColunaVaga findById(Integer id){
+        return colunaVagaRepository.findById(id).orElse(null);
+    }
+
     public ColunaVagaService(final ColunaVagaRepository colunaVagaRepository,
             final ColunaStorageRepository colunaStorageRepository,
             final ColunaUtilRepository colunaUtilRepository) {
@@ -78,6 +82,7 @@ public class ColunaVagaService {
         colunaVagaDTO.setVaga(colunaVaga.getVaga());
         colunaVagaDTO.setObs(colunaVaga.getObs());
         colunaVagaDTO.setColunaStorage(colunaVaga.getColunaStorage() == null ? null : colunaVaga.getColunaStorage().getId());
+        colunaVagaDTO.setVersion(colunaVaga.getVersion());
         return colunaVagaDTO;
     }
 

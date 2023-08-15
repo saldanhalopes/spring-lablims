@@ -1,6 +1,7 @@
 package br.com.lablims.service;
 
 import br.com.lablims.domain.AmostraTipo;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.domain.Lote;
 import br.com.lablims.model.AmostraTipoDTO;
 import br.com.lablims.model.SimplePage;
@@ -19,6 +20,9 @@ public class AmostraTipoService {
     private final AmostraTipoRepository amostraTipoRepository;
     private final LoteRepository loteRepository;
 
+    public AmostraTipo findById(Integer id){
+        return amostraTipoRepository.findById(id).orElse(null);
+    }
     public AmostraTipoService(final AmostraTipoRepository amostraTipoRepository,
             final LoteRepository loteRepository) {
         this.amostraTipoRepository = amostraTipoRepository;

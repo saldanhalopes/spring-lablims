@@ -2,6 +2,7 @@ package br.com.lablims.service;
 
 import br.com.lablims.domain.AnaliseProdutividade;
 import br.com.lablims.domain.AnaliseStatus;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.domain.LoteStatus;
 import br.com.lablims.model.AnaliseStatusDTO;
 import br.com.lablims.model.SimplePage;
@@ -21,6 +22,10 @@ public class AnaliseStatusService {
     private final AnaliseStatusRepository analiseStatusRepository;
     private final AnaliseProdutividadeRepository analiseProdutividadeRepository;
     private final LoteStatusRepository loteStatusRepository;
+
+    public AnaliseStatus findById(Integer id){
+        return analiseStatusRepository.findById(id).orElse(null);
+    }
 
     public AnaliseStatusService(final AnaliseStatusRepository analiseStatusRepository,
             final AnaliseProdutividadeRepository analiseProdutividadeRepository,

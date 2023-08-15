@@ -41,6 +41,22 @@
             </div>
         </div>
 
+        <div th:fragment="selectColorRow(object, field)" th:with="type=${type} ?: 'text', required=${required}, inputClass=${inputClass}" th:object="${__${object}__}" class="row mb-3">
+            <label th:for="${field}" class="col-md-2 col-form-label">
+                <span th:text="#{__${object}__.__${field}__.label}" /><!--/*
+                */--><span th:replace="~{:: requiredStar(object=${object}, field=${field}, required=${required})}" />
+            </label>
+            <div class="col-md-10">
+                <select th:if="${type == 'select' || type == 'multiselect'}" th:field="*{__${field}__}"
+                        th:multiple="${type == 'multiselect'}" th:classappend="${#fields.hasErrors(field) ? 'is-invalid' : ''} + ' ' + ${inputClass}" class="form-select">
+                    <option th:if="${type == 'select'}" value="" th:text="#{select.empty.label}" />
+                    <option th:if="${type == 'select'}" th:each="optionValue : ${T(br.com.lablims.util.Color).values()}"
+                            th:value="${optionValue.getCor()}" th:text="${optionValue}" th:classappend="${optionValue.getCor()}"/>
+                </select>
+                <div th:replace="~{:: fieldErrors(${object}, ${field})}" />
+            </div>
+        </div>
+
         <span th:fragment="requiredStar(object, field)" th:with="required=${required}"
                 th:if="${required == null ? T(br.com.lablims.util.WebUtils).isRequiredField(__${object}__, field) : required}">*</span>
 

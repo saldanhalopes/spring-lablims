@@ -10,5 +10,6 @@ public class SolucaoEquipamentoDTO {
 
     private Integer id;
     private Integer solucaoRegistro;
+    private Short version;
 
 }

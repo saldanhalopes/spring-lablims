@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
@@ -23,8 +24,11 @@ public class ArquivosDTO {
 
     private Double tamanho;
 
-    private Long arquivo;
+    private byte[] arquivo;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dataCriacao;
+
+    private Short version;
 
 }

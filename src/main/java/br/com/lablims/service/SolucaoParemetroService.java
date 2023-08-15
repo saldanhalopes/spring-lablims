@@ -18,6 +18,10 @@ public class SolucaoParemetroService {
     private final SolucaoParemetroRepository solucaoParemetroRepository;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
 
+    public SolucaoParemetro findById(Integer id){
+        return solucaoParemetroRepository.findById(id).orElse(null);
+    }
+
     public SolucaoParemetroService(final SolucaoParemetroRepository solucaoParemetroRepository,
             final SolucaoRegistroRepository solucaoRegistroRepository) {
         this.solucaoParemetroRepository = solucaoParemetroRepository;
@@ -73,6 +77,7 @@ public class SolucaoParemetroService {
         solucaoParemetroDTO.setParemetro(solucaoParemetro.getParemetro());
         solucaoParemetroDTO.setValor(solucaoParemetro.getValor());
         solucaoParemetroDTO.setSolucaoRegistro(solucaoParemetro.getSolucaoRegistro() == null ? null : solucaoParemetro.getSolucaoRegistro().getId());
+        solucaoParemetroDTO.setVersion(solucaoParemetro.getVersion());
         return solucaoParemetroDTO;
     }
 

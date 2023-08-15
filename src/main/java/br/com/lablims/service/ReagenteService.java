@@ -28,6 +28,10 @@ public class ReagenteService {
     private final PlanoAnaliseReagenteRepository planoAnaliseReagenteRepository;
     private final SolucaoReagenteRepository solucaoReagenteRepository;
 
+    public Reagente findById(Integer id){
+        return reagenteRepository.findById(id).orElse(null);
+    }
+
     public ReagenteService(final ReagenteRepository reagenteRepository,
             final UnidadeMedidaRepository unidadeMedidaRepository,
             final ArquivosRepository arquivosRepository,
@@ -105,6 +109,7 @@ public class ReagenteService {
         reagenteDTO.setObs(reagente.getObs());
         reagenteDTO.setUnidade(reagente.getUnidade() == null ? null : reagente.getUnidade().getId());
         reagenteDTO.setFds(reagente.getFds() == null ? null : reagente.getFds().getId());
+        reagenteDTO.setVersion(reagente.getVersion());
         return reagenteDTO;
     }
 

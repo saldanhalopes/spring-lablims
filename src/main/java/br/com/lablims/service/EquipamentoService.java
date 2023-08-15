@@ -42,6 +42,10 @@ public class EquipamentoService {
     private final ColunaLogRepository colunaLogRepository;
     private final EquipamentoLogRepository equipamentoLogRepository;
 
+    public Equipamento findById(Integer id){
+        return equipamentoRepository.findById(id).orElse(null);
+    }
+
     public EquipamentoService(final EquipamentoRepository equipamentoRepository,
             final EquipamentoTipoRepository equipamentoTipoRepository,
             final SetorRepository setorRepository, final ArquivosRepository arquivosRepository,
@@ -130,6 +134,7 @@ public class EquipamentoService {
         equipamentoDTO.setManual(equipamento.getManual() == null ? null : equipamento.getManual().getId());
         equipamentoDTO.setProcedimento(equipamento.getProcedimento() == null ? null : equipamento.getProcedimento().getId());
         equipamentoDTO.setEscala(equipamento.getEscala() == null ? null : equipamento.getEscala().getId());
+        equipamentoDTO.setVersion(equipamento.getVersion());
         return equipamentoDTO;
     }
 

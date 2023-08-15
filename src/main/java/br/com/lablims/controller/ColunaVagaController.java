@@ -44,7 +44,7 @@ public class ColunaVagaController {
     public void prepareContext(final Model model) {
         model.addAttribute("colunaStorageValues", colunaStorageRepository.findAll(Sort.by("id"))
                 .stream()
-                .collect(CustomCollectors.toSortedMap(ColunaStorage::getId, ColunaStorage::getNumero)));
+                .collect(CustomCollectors.toSortedMap(ColunaStorage::getId, ColunaStorage::getCodigo)));
     }
 
     @GetMapping

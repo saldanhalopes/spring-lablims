@@ -14,4 +14,6 @@ public class CategoriaMetodologiaDTO {
     @Size(max = 255)
     private String categoria;
 
+    private Short version;
+
 }

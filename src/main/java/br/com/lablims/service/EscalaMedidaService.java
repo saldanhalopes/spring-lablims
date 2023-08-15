@@ -22,6 +22,10 @@ public class EscalaMedidaService {
     private final UnidadeMedidaRepository unidadeMedidaRepository;
     private final EquipamentoRepository equipamentoRepository;
 
+    public EscalaMedida findById(Integer id){
+        return escalaMedidaRepository.findById(id).orElse(null);
+    }
+
     public EscalaMedidaService(final EscalaMedidaRepository escalaMedidaRepository,
             final UnidadeMedidaRepository unidadeMedidaRepository,
             final EquipamentoRepository equipamentoRepository) {
@@ -77,6 +81,7 @@ public class EscalaMedidaService {
             final EscalaMedidaDTO escalaMedidaDTO) {
         escalaMedidaDTO.setId(escalaMedida.getId());
         escalaMedidaDTO.setEscala(escalaMedida.getEscala());
+        escalaMedidaDTO.setVersion(escalaMedida.getVersion());
         return escalaMedidaDTO;
     }
 

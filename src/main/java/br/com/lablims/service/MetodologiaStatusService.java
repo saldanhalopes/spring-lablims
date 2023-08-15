@@ -19,6 +19,10 @@ public class MetodologiaStatusService {
     private final MetodologiaStatusRepository metodologiaStatusRepository;
     private final MetodologiaVesaoRepository metodologiaVesaoRepository;
 
+    public MetodologiaStatus findById(Integer id){
+        return metodologiaStatusRepository.findById(id).orElse(null);
+    }
+
     public MetodologiaStatusService(final MetodologiaStatusRepository metodologiaStatusRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository) {
         this.metodologiaStatusRepository = metodologiaStatusRepository;
@@ -72,6 +76,7 @@ public class MetodologiaStatusService {
             final MetodologiaStatusDTO metodologiaStatusDTO) {
         metodologiaStatusDTO.setId(metodologiaStatus.getId());
         metodologiaStatusDTO.setStatus(metodologiaStatus.getStatus());
+        metodologiaStatusDTO.setVersion(metodologiaStatus.getVersion());
         return metodologiaStatusDTO;
     }
 

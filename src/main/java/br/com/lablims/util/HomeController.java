@@ -1,4 +1,4 @@
-package br.com.lablims.controller;
+package br.com.lablims.util;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,11 @@ public class HomeController {
     @GetMapping("/index")
     public String index() {
         return "/index";
+    }
+
+    @GetMapping("/parameters")
+    public String parameters() {
+        return "/parameters/index";
     }
 
 }

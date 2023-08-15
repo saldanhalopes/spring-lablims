@@ -33,6 +33,10 @@ public class CelulaService {
     private final CelulaTipoRepository celulaTipoRepository;
     private final CampanhaRepository campanhaRepository;
 
+    public Celula findById(Integer id){
+        return celulaRepository.findById(id).orElse(null);
+    }
+
     public CelulaService(final CelulaRepository celulaRepository,
             final EquipamentoRepository equipamentoRepository,
             final UsuarioRepository usuarioRepository,
@@ -92,6 +96,7 @@ public class CelulaService {
         celulaDTO.setId(celula.getId());
         celulaDTO.setCelula(celula.getCelula());
         celulaDTO.setDescricao(celula.getDescricao());
+        celulaDTO.setVersion(celula.getVersion());
         celulaDTO.setEquipamento(celula.getEquipamento().stream()
                 .map(equipamento -> equipamento.getId())
                 .toList());

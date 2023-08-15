@@ -19,6 +19,10 @@ public class SolucaoTipoService {
     private final SolucaoTipoRepository solucaoTipoRepository;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
 
+    public SolucaoTipo findById(Integer id){
+        return solucaoTipoRepository.findById(id).orElse(null);
+    }
+
     public SolucaoTipoService(final SolucaoTipoRepository solucaoTipoRepository,
             final SolucaoRegistroRepository solucaoRegistroRepository) {
         this.solucaoTipoRepository = solucaoTipoRepository;
@@ -73,6 +77,7 @@ public class SolucaoTipoService {
         solucaoTipoDTO.setId(solucaoTipo.getId());
         solucaoTipoDTO.setSiglaSolucao(solucaoTipo.getSiglaSolucao());
         solucaoTipoDTO.setTipoSolucao(solucaoTipo.getTipoSolucao());
+        solucaoTipoDTO.setVersion(solucaoTipo.getVersion());
         return solucaoTipoDTO;
     }
 

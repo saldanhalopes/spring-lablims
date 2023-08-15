@@ -24,6 +24,10 @@ public class SolucaoReagenteService {
     private final ReagenteRepository reagenteRepository;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
 
+    public SolucaoReagente findById(Integer id){
+        return solucaoReagenteRepository.findById(id).orElse(null);
+    }
+
     public SolucaoReagenteService(final SolucaoReagenteRepository solucaoReagenteRepository,
             final SolucaoRegistroRepository solucaoRegistroRepository,
             final ReagenteRepository reagenteRepository,
@@ -87,6 +91,7 @@ public class SolucaoReagenteService {
         solucaoReagenteDTO.setSolucaoRegistro(solucaoReagente.getSolucaoRegistro() == null ? null : solucaoReagente.getSolucaoRegistro().getId());
         solucaoReagenteDTO.setReagente(solucaoReagente.getReagente() == null ? null : solucaoReagente.getReagente().getId());
         solucaoReagenteDTO.setUnidade(solucaoReagente.getUnidade() == null ? null : solucaoReagente.getUnidade().getId());
+        solucaoReagenteDTO.setVersion(solucaoReagente.getVersion());
         return solucaoReagenteDTO;
     }
 

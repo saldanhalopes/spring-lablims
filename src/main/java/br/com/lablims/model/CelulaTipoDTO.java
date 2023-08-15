@@ -14,4 +14,6 @@ public class CelulaTipoDTO {
     @Size(max = 255)
     private String tipo;
 
+    private Short version;
+
 }

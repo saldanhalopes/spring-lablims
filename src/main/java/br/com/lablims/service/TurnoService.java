@@ -19,6 +19,10 @@ public class TurnoService {
     private final TurnoRepository turnoRepository;
     private final AtaTurnoRepository ataTurnoRepository;
 
+    public Turno findById(Integer id){
+        return turnoRepository.findById(id).orElse(null);
+    }
+
     public TurnoService(final TurnoRepository turnoRepository,
             final AtaTurnoRepository ataTurnoRepository) {
         this.turnoRepository = turnoRepository;
@@ -71,6 +75,7 @@ public class TurnoService {
     private TurnoDTO mapToDTO(final Turno turno, final TurnoDTO turnoDTO) {
         turnoDTO.setId(turno.getId());
         turnoDTO.setTurno(turno.getTurno());
+        turnoDTO.setVersion(turno.getVersion());
         return turnoDTO;
     }
 

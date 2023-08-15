@@ -1,5 +1,7 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Celula;
 import br.com.lablims.domain.CelulaTipo;
 import br.com.lablims.domain.Equipamento;
 import br.com.lablims.domain.Usuario;
@@ -7,12 +9,14 @@ import br.com.lablims.model.CelulaDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.CelulaTipoRepository;
 import br.com.lablims.repos.EquipamentoRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.UsuarioRepository;
 import br.com.lablims.service.CelulaService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/celulas")
@@ -39,6 +45,9 @@ public class CelulaController {
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
     private final CelulaTipoRepository celulaTipoRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public CelulaController(final CelulaService celulaService,
             final EquipamentoRepository equipamentoRepository,
@@ -119,6 +128,21 @@ public class CelulaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("celula.delete.success"));
         }
         return "redirect:/celulas";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Celula>> revisoes = genericRevisionRepository.listaRevisoes(Celula.class);
+        model.addAttribute("audits", revisoes);
+        return "/celula/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Celula celula = celulaService.findById(id);
+        List<EntityRevision<Celula>> revisoes = genericRevisionRepository.listaRevisoesById(celula.getId(), Celula.class);
+        model.addAttribute("audits", revisoes);
+        return "/celula/audit";
     }
 
 }

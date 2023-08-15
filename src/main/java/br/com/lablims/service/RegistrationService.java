@@ -34,23 +34,10 @@ public class RegistrationService {
         log.info("registering new user: {}", registrationRequest.getUsername());
 
         final Usuario usuario = new Usuario();
-        usuario.setCep(registrationRequest.getCep());
-        usuario.setChangePass(registrationRequest.getChangePass());
-        usuario.setCidade(registrationRequest.getCidade());
-        usuario.setCpf(registrationRequest.getCpf());
-        usuario.setDetalhes(registrationRequest.getDetalhes());
         usuario.setEmail(registrationRequest.getEmail());
-        usuario.setEndereco(registrationRequest.getEndereco());
-        usuario.setEstado(registrationRequest.getEstado());
-        usuario.setFailedAccessCount(registrationRequest.getFailedAccessCount());
-        usuario.setLastChangePass(registrationRequest.getLastChangePass());
-        usuario.setLastLogin(registrationRequest.getLastLogin());
-        usuario.setLastLogout(registrationRequest.getLastLogout());
         usuario.setNome(registrationRequest.getNome());
-        usuario.setPais(registrationRequest.getPais());
         usuario.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         usuario.setSobrenome(registrationRequest.getSobrenome());
-        usuario.setTelefone(registrationRequest.getTelefone());
         usuario.setUsername(registrationRequest.getUsername());
         // assign default role
         usuario.setGrupos(Collections.singleton(grupoRepository.findTopByRegra(UserRoles.ADMIN)));

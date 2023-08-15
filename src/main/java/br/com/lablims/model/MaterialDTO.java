@@ -23,4 +23,6 @@ public class MaterialDTO {
 
     private Integer tipoMaterial;
 
+    private Short version;
+
 }

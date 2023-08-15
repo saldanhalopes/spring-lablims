@@ -36,6 +36,10 @@ public class ArquivosService {
     private final ReagenteRepository reagenteRepository;
     private final EquipamentoLogRepository equipamentoLogRepository;
 
+    public Arquivos findById(Integer id){
+        return arquivosRepository.findById(id).orElse(null);
+    }
+
     public ArquivosService(final ArquivosRepository arquivosRepository,
             final ColunaUtilRepository colunaUtilRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository,
@@ -108,6 +112,7 @@ public class ArquivosService {
         arquivosDTO.setTamanho(arquivos.getTamanho());
         arquivosDTO.setArquivo(arquivos.getArquivo());
         arquivosDTO.setDataCriacao(arquivos.getDataCriacao());
+        arquivosDTO.setVersion(arquivos.getVersion());
         return arquivosDTO;
     }
 

@@ -14,4 +14,6 @@ public class EscalaMedidaDTO {
     @Size(max = 255)
     private String escala;
 
+    private Short version;
+
 }

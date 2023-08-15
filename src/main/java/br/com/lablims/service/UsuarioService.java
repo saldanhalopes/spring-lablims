@@ -21,9 +21,12 @@ import br.com.lablims.repos.UsuarioRepository;
 import br.com.lablims.util.NotFoundException;
 import br.com.lablims.util.WebUtils;
 import jakarta.transaction.Transactional;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,13 +47,17 @@ public class UsuarioService {
     private final LoteStatusRepository loteStatusRepository;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
 
+    public Usuario findById(Integer id){
+        return usuarioRepository.findById(id).orElse(null);
+    }
+
     public UsuarioService(final UsuarioRepository usuarioRepository,
-            final GrupoRepository grupoRepository, final PasswordEncoder passwordEncoder,
-            final CelulaRepository celulaRepository, final ColunaLogRepository colunaLogRepository,
-            final AtaTurnoRepository ataTurnoRepository,
-            final EquipamentoLogRepository equipamentoLogRepository,
-            final LoteStatusRepository loteStatusRepository,
-            final SolucaoRegistroRepository solucaoRegistroRepository) {
+                          final GrupoRepository grupoRepository, final PasswordEncoder passwordEncoder,
+                          final CelulaRepository celulaRepository, final ColunaLogRepository colunaLogRepository,
+                          final AtaTurnoRepository ataTurnoRepository,
+                          final EquipamentoLogRepository equipamentoLogRepository,
+                          final LoteStatusRepository loteStatusRepository,
+                          final SolucaoRegistroRepository solucaoRegistroRepository) {
         this.usuarioRepository = usuarioRepository;
         this.grupoRepository = grupoRepository;
         this.passwordEncoder = passwordEncoder;
@@ -86,6 +93,14 @@ public class UsuarioService {
         return usuarioRepository.findById(id)
                 .map(usuario -> mapToDTO(usuario, new UsuarioDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Usuario findByUsername(String username) {
+        return usuarioRepository.findByUsernameIgnoreCase(username);
+    }
+
+    public boolean validarUser(Usuario usuario, String password) {
+        return passwordEncoder.matches(password, usuario.getPassword());
     }
 
     public Integer create(final UsuarioDTO usuarioDTO) {
@@ -129,6 +144,7 @@ public class UsuarioService {
         usuarioDTO.setSobrenome(usuario.getSobrenome());
         usuarioDTO.setTelefone(usuario.getTelefone());
         usuarioDTO.setUsername(usuario.getUsername());
+        usuarioDTO.setVersion(usuario.getVersion());
         usuarioDTO.setGrupos(usuario.getGrupos().stream()
                 .map(grupo -> grupo.getId())
                 .toList());

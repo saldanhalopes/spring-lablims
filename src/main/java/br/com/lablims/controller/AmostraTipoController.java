@@ -1,11 +1,16 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.AmostraTipo;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.model.AmostraTipoDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.AmostraTipoService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/amostraTipos")
@@ -28,6 +35,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AmostraTipoController {
 
     private final AmostraTipoService amostraTipoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public AmostraTipoController(final AmostraTipoService amostraTipoService) {
         this.amostraTipoService = amostraTipoService;
@@ -89,6 +99,21 @@ public class AmostraTipoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("amostraTipo.delete.success"));
         }
         return "redirect:/amostraTipos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<AmostraTipo>> revisoes = genericRevisionRepository.listaRevisoes(AmostraTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseTipo/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        AmostraTipo amostraTipo = amostraTipoService.findById(id);
+        List<EntityRevision<AnaliseTipo>> revisoes = genericRevisionRepository.listaRevisoesById(amostraTipo.getId(), AmostraTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseTipo/audit";
     }
 
 }

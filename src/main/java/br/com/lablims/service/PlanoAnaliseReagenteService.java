@@ -18,6 +18,10 @@ public class PlanoAnaliseReagenteService {
     private final PlanoAnaliseReagenteRepository planoAnaliseReagenteRepository;
     private final ReagenteRepository reagenteRepository;
 
+    public PlanoAnaliseReagente findById(Integer id){
+        return planoAnaliseReagenteRepository.findById(id).orElse(null);
+    }
+
     public PlanoAnaliseReagenteService(
             final PlanoAnaliseReagenteRepository planoAnaliseReagenteRepository,
             final ReagenteRepository reagenteRepository) {
@@ -75,6 +79,7 @@ public class PlanoAnaliseReagenteService {
         planoAnaliseReagenteDTO.setQtdUtilizada(planoAnaliseReagente.getQtdUtilizada());
         planoAnaliseReagenteDTO.setObs(planoAnaliseReagente.getObs());
         planoAnaliseReagenteDTO.setReagente(planoAnaliseReagente.getReagente() == null ? null : planoAnaliseReagente.getReagente().getId());
+        planoAnaliseReagenteDTO.setVersion(planoAnaliseReagente.getVersion());
         return planoAnaliseReagenteDTO;
     }
 

@@ -20,6 +20,6 @@ public class AnaliseTipoDTO {
     @Size(max = 255)
     private String descricaoAnaliseTipo;
 
-    private Long version;
+    private Short version;
 
 }

@@ -22,4 +22,5 @@ public class AnaliseStatusDTO {
 
     private Integer analiseProdutividade;
 
+    private Short version;
 }

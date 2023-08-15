@@ -2,6 +2,8 @@ package br.com.lablims.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -41,14 +43,14 @@ public class UsuarioDTO {
 
     private Integer failedAccessCount;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    private OffsetDateTime lastChangePass;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastChangePass;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    private OffsetDateTime lastLogin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastLogin;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    private OffsetDateTime lastLogout;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastLogout;
 
     @Size(max = 255)
     private String nome;
@@ -71,5 +73,7 @@ public class UsuarioDTO {
     private String username;
 
     private List<Integer> grupos;
+
+    private Short version;
 
 }

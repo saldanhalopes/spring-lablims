@@ -1,11 +1,16 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.AnaliseProdutividade;
+import br.com.lablims.domain.AnaliseTipo;
 import br.com.lablims.model.AnaliseProdutividadeDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.AnaliseProdutividadeService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/analiseProdutividades")
@@ -28,6 +35,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AnaliseProdutividadeController {
 
     private final AnaliseProdutividadeService analiseProdutividadeService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public AnaliseProdutividadeController(
             final AnaliseProdutividadeService analiseProdutividadeService) {
@@ -92,6 +102,21 @@ public class AnaliseProdutividadeController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("analiseProdutividade.delete.success"));
         }
         return "redirect:/analiseProdutividades";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<AnaliseProdutividade>> revisoes = genericRevisionRepository.listaRevisoes(AnaliseProdutividade.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseProdutividade/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        AnaliseProdutividade analiseProdutividade = analiseProdutividadeService.findById(id);
+        List<EntityRevision<AnaliseProdutividade>> revisoes = genericRevisionRepository.listaRevisoesById(analiseProdutividade.getId(), AnaliseProdutividade.class);
+        model.addAttribute("audits", revisoes);
+        return "/analiseProdutividade/audit";
     }
 
 }

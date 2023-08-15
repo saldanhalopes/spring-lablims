@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.ColunaConfig;
 import br.com.lablims.model.ColunaConfigDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.ColunaConfigService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/colunaConfigs")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ColunaConfigController {
 
     private final ColunaConfigService colunaConfigService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ColunaConfigController(final ColunaConfigService colunaConfigService) {
         this.colunaConfigService = colunaConfigService;
@@ -89,6 +98,21 @@ public class ColunaConfigController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("colunaConfig.delete.success"));
         }
         return "redirect:/colunaConfigs";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<ColunaConfig>> revisoes = genericRevisionRepository.listaRevisoes(ColunaConfig.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaConfig/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        ColunaConfig colunaConfig = colunaConfigService.findById(id);
+        List<EntityRevision<ColunaConfig>> revisoes = genericRevisionRepository.listaRevisoesById(colunaConfig.getId(), ColunaConfig.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaConfig/audit";
     }
 
 }

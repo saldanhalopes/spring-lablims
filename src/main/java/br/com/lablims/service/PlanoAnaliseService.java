@@ -34,6 +34,10 @@ public class PlanoAnaliseService {
     private final PlanoAnaliseColunaRepository planoAnaliseColunaRepository;
     private final LoteStatusRepository loteStatusRepository;
 
+    public PlanoAnalise findById(Integer id){
+        return planoAnaliseRepository.findById(id).orElse(null);
+    }
+
     public PlanoAnaliseService(final PlanoAnaliseRepository planoAnaliseRepository,
             final MetodologiaVesaoRepository metodologiaVesaoRepository,
             final AnaliseRepository analiseRepository,
@@ -104,6 +108,7 @@ public class PlanoAnaliseService {
         planoAnaliseDTO.setAnalise(planoAnalise.getAnalise() == null ? null : planoAnalise.getAnalise().getId());
         planoAnaliseDTO.setAnaliseTipo(planoAnalise.getAnaliseTipo() == null ? null : planoAnalise.getAnaliseTipo().getId());
         planoAnaliseDTO.setSetor(planoAnalise.getSetor() == null ? null : planoAnalise.getSetor().getId());
+        planoAnaliseDTO.setVersion(planoAnalise.getVersion());
         return planoAnaliseDTO;
     }
 

@@ -34,6 +34,10 @@ public class SolucaoRegistroService {
     private final SolucaoEquipamentoRepository solucaoEquipamentoRepository;
     private final SolucaoReagenteRepository solucaoReagenteRepository;
 
+    public SolucaoRegistro findById(Integer id){
+        return solucaoRegistroRepository.findById(id).orElse(null);
+    }
+
     public SolucaoRegistroService(final SolucaoRegistroRepository solucaoRegistroRepository,
             final SolucaoTipoRepository solucaoTipoRepository,
             final UsuarioRepository usuarioRepository,
@@ -111,6 +115,7 @@ public class SolucaoRegistroService {
         solucaoRegistroDTO.setCriador(solucaoRegistro.getCriador() == null ? null : solucaoRegistro.getCriador().getId());
         solucaoRegistroDTO.setConferente(solucaoRegistro.getConferente() == null ? null : solucaoRegistro.getConferente().getId());
         solucaoRegistroDTO.setUnidade(solucaoRegistro.getUnidade() == null ? null : solucaoRegistro.getUnidade().getId());
+        solucaoRegistroDTO.setVersion(solucaoRegistro.getVersion());
         return solucaoRegistroDTO;
     }
 

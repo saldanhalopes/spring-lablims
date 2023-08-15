@@ -19,6 +19,10 @@ public class ColunaConfigService {
     private final ColunaConfigRepository colunaConfigRepository;
     private final ColunaRepository colunaRepository;
 
+    public ColunaConfig findById(Integer id){
+        return colunaConfigRepository.findById(id).orElse(null);
+    }
+
     public ColunaConfigService(final ColunaConfigRepository colunaConfigRepository,
             final ColunaRepository colunaRepository) {
         this.colunaConfigRepository = colunaConfigRepository;
@@ -74,6 +78,7 @@ public class ColunaConfigService {
         colunaConfigDTO.setTipo(colunaConfig.getTipo());
         colunaConfigDTO.setConfiguracao(colunaConfig.getConfiguracao());
         colunaConfigDTO.setDescricao(colunaConfig.getDescricao());
+        colunaConfigDTO.setVersion(colunaConfig.getVersion());
         return colunaConfigDTO;
     }
 

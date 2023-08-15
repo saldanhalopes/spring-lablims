@@ -34,4 +34,6 @@ public class ColunaDTO {
 
     private Integer particulaColuna;
 
+    private Short version;
+
 }

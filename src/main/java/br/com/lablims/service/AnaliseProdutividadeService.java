@@ -19,6 +19,10 @@ public class AnaliseProdutividadeService {
     private final AnaliseProdutividadeRepository analiseProdutividadeRepository;
     private final AnaliseStatusRepository analiseStatusRepository;
 
+    public AnaliseProdutividade findById(Integer id){
+        return analiseProdutividadeRepository.findById(id).orElse(null);
+    }
+
     public AnaliseProdutividadeService(
             final AnaliseProdutividadeRepository analiseProdutividadeRepository,
             final AnaliseStatusRepository analiseStatusRepository) {
@@ -77,6 +81,7 @@ public class AnaliseProdutividadeService {
         analiseProdutividadeDTO.setSiglaProdutividade(analiseProdutividade.getSiglaProdutividade());
         analiseProdutividadeDTO.setDescricaoProdutividade(analiseProdutividade.getDescricaoProdutividade());
         analiseProdutividadeDTO.setCorProdutividade(analiseProdutividade.getCorProdutividade());
+        analiseProdutividadeDTO.setVersion(analiseProdutividade.getVersion());
         return analiseProdutividadeDTO;
     }
 

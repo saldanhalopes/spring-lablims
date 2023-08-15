@@ -27,6 +27,10 @@ public class EquipamentoLogService {
     private final UsuarioRepository usuarioRepository;
     private final ArquivosRepository arquivosRepository;
 
+    public EquipamentoLog findById(Integer id){
+        return equipamentoLogRepository.findById(id).orElse(null);
+    }
+
     public EquipamentoLogService(final EquipamentoLogRepository equipamentoLogRepository,
             final EquipamentoAtividadeRepository equipamentoAtividadeRepository,
             final EquipamentoRepository equipamentoRepository,
@@ -94,6 +98,7 @@ public class EquipamentoLogService {
         equipamentoLogDTO.setUsuarioInicio(equipamentoLog.getUsuarioInicio() == null ? null : equipamentoLog.getUsuarioInicio().getId());
         equipamentoLogDTO.setUsuarioFim(equipamentoLog.getUsuarioFim() == null ? null : equipamentoLog.getUsuarioFim().getId());
         equipamentoLogDTO.setAnexo(equipamentoLog.getAnexo() == null ? null : equipamentoLog.getAnexo().getId());
+        equipamentoLogDTO.setVersion(equipamentoLog.getVersion());
         return equipamentoLogDTO;
     }
 
