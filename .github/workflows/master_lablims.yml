@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'LABLIMS'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_400B038D9F8B470AAB44237EB431CD24 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A691D21892CF48AFB507F0C60D951D60 }}
           package: '*.war'
