@@ -1,19 +1,83 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{authentication.login.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <h1 th:text="#{authentication.login.headline}" class="mb-4" />
-            <div th:replace="~{fragments/forms::globalErrors('authentication')}" />
-            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='authentication', field='username')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='authentication', field='password', type='password')}" />
-                <input type="submit" th:value="#{authentication.login.headline}" class="btn btn-primary mt-4" />
-            </form>
-            <p th:utext="#{authentication.registerNow}" class="mt-5" />
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lablims</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/fontawesome.css}">
+    <link rel="stylesheet" th:href="@{/css/Chart.min.css}">
+    <link rel="stylesheet" th:href="@{/css/perfect-scrollbar.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/datatables.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}" type="image/x-icon">
+</head>
+
+<body>
+<div id="auth" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-sm-12 mx-auto">
+                <div class="card pt-4">
+                    <div class="card-body">
+                        <div class="text-center mb-5">
+                            <img src="/images/logo.png" height="96" class="mb-4">
+                        </div>
+                        <div th:if="${MSG_INFO != null}" th:text="${MSG_INFO}" class="alert alert-info" role="alert" />
+                        <div th:if="${MSG_ERROR != null}" th:text="${MSG_ERROR}" class="alert alert-danger" role="alert" />
+                        <div th:if="${MSG_WARNING != null}" th:text="${MSG_WARNING}" class="alert alert-warning" role="alert" />
+                        <form th:action="@{/login}" method="post">
+                            <div class="form-group position-relative has-icon-left">
+                                <label for="username">Username</label>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control" id="username" th:name="username">
+                                    <div class="form-control-icon">
+                                        <span ><i class="fa-user fa-solid fa-2xl"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group position-relative has-icon-left">
+                                <div class="clearfix">
+                                    <label for="password">Password</label>
+                                    <a href="auth-forgot-password.html" class="float-end">
+                                        <small>Forgot password?</small>
+                                    </a>
+                                </div>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" id="password" th:name="password">
+                                    <div class="form-control-icon">
+                                        <span ><i class="fa-lock fa-solid fa-2xl"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <input type="submit" th:value="#{authentication.login.headline}" class="btn btn-primary float-end" />
+                            </div>
+                        </form>
+                        <p th:utext="#{authentication.registerNow}" class="mt-5" />
+                    </div>
+                </div>
+            </div>
         </div>
-    </body>
+    </div>
+</div>
+
+<script th:src="@{/js/feather.min.js}"></script>
+<script th:src="@{/js/fontawesome.js}"></script>
+<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/Chart.min.js}"></script>
+<script th:src="@{/js/apexcharts.min.js}"></script>
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<script th:src="@{/js/jquery-3.7.0.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/datatables-bootstrap.js}"></script>
+
+<span layout:fragment="script"></span>
+
+</body>
 </html>

@@ -99,8 +99,13 @@ public class UsuarioService {
         return usuarioRepository.findByUsernameIgnoreCase(username);
     }
 
-    public boolean validarUser(Usuario usuario, String password) {
-        return passwordEncoder.matches(password, usuario.getPassword());
+    public boolean validarUser(String usuario, String password) {
+        try {
+            final Usuario user = usuarioRepository.findByUsername(usuario).orElse(null);
+            return passwordEncoder.matches(password, user.getPassword());
+        } catch (final NotFoundException notFoundException) {
+            return false;
+        }
     }
 
     public Integer create(final UsuarioDTO usuarioDTO) {

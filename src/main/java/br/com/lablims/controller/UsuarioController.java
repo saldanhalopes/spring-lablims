@@ -1,15 +1,19 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
 import br.com.lablims.domain.Grupo;
 import br.com.lablims.domain.Usuario;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.UsuarioDTO;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.GrupoRepository;
 import br.com.lablims.service.UsuarioService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +21,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -40,6 +46,8 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final GrupoRepository grupoRepository;
 
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
     public UsuarioController(final UsuarioService usuarioService,
             final GrupoRepository grupoRepository) {
         this.usuarioService = usuarioService;
@@ -128,11 +136,32 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
-    @GetMapping("/validar")
-    public void validarSenha(Principal principal, @RequestParam String pass){
-        Usuario currentUsuario = usuarioService.findByUsername(principal.getName());
-        boolean valid =  usuarioService.validarUser(currentUsuario, pass);
-        System.out.println(valid);
+    @PostMapping("/validarSenha")
+    public String validarSenha(Principal principal, @RequestParam("password") String pass, HttpSession session){
+        if(usuarioService.validarUser(principal.getName(), pass)){
+            System.out.println("confere --------------------------");
+            session.setAttribute("msg", "pass ok");
+            return "redirect:/usuarios";
+        }else{
+            System.out.println("erro --------------------------");
+            session.setAttribute("msg", "erro");
+            return null;
+        }
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Usuario>> revisoes = genericRevisionRepository.listaRevisoes(Usuario.class);
+        model.addAttribute("audits", revisoes);
+        return "/usuario/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Usuario usuario = usuarioService.findById(id);
+        List<EntityRevision<Usuario>> revisoes = genericRevisionRepository.listaRevisoesById(usuario.getId(), Usuario.class);
+        model.addAttribute("audits", revisoes);
+        return "/usuario/audit";
     }
 
 }

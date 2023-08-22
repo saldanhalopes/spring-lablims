@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import java.util.Map;
+
 public class CustomRevisionListener implements RevisionListener {
 
     @Override
@@ -19,10 +21,6 @@ public class CustomRevisionListener implements RevisionListener {
             revision.setUserName(((UserDetails) principal).getUsername());
         if (details instanceof WebAuthenticationDetails)
             revision.setIp(((WebAuthenticationDetails) details).getRemoteAddress());
-
-//        auditRevision.setMotivo(FrmSalvar.motivo == null ? "Alterado: "
-//                + DataHora.getStringDateTime(new Date())
-//                : FrmSalvar.motivo);
-
+        revision.setMotivo(CustomRevisionEntity.getMotivoText());
     }
 }

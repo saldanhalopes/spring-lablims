@@ -1,6 +1,7 @@
 package br.com.lablims.controller;
 
 import br.com.lablims.domain.Reagente;
+import br.com.lablims.domain.SolucaoReagente;
 import br.com.lablims.domain.SolucaoRegistro;
 import br.com.lablims.domain.UnidadeMedida;
 import br.com.lablims.model.SimplePage;
@@ -28,6 +29,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -39,6 +45,9 @@ public class SolucaoReagenteController {
     private final SolucaoRegistroRepository solucaoRegistroRepository;
     private final ReagenteRepository reagenteRepository;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public SolucaoReagenteController(final SolucaoReagenteService solucaoReagenteService,
             final SolucaoRegistroRepository solucaoRegistroRepository,
@@ -116,6 +125,21 @@ public class SolucaoReagenteController {
         solucaoReagenteService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("solucaoReagente.delete.success"));
         return "redirect:/solucaoReagentes";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<SolucaoReagente>> revisoes = genericRevisionRepository.listaRevisoes(SolucaoReagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoReagente/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        SolucaoReagente solucaoReagente = solucaoReagenteService.findById(id);
+        List<EntityRevision<SolucaoReagente>> revisoes = genericRevisionRepository.listaRevisoesById(solucaoReagente.getId(), SolucaoReagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoReagente/audit";
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.Material;
 import br.com.lablims.domain.MaterialTipo;
 import br.com.lablims.model.MaterialDTO;
 import br.com.lablims.model.SimplePage;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -33,6 +39,10 @@ public class MaterialController {
 
     private final MaterialService materialService;
     private final MaterialTipoRepository materialTipoRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+
 
     public MaterialController(final MaterialService materialService,
             final MaterialTipoRepository materialTipoRepository) {
@@ -103,6 +113,21 @@ public class MaterialController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("material.delete.success"));
         }
         return "redirect:/materials";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Material>> revisoes = genericRevisionRepository.listaRevisoes(Material.class);
+        model.addAttribute("audits", revisoes);
+        return "/material/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Material material = materialService.findById(id);
+        List<EntityRevision<Material>> revisoes = genericRevisionRepository.listaRevisoesById(material.getId(), Material.class);
+        model.addAttribute("audits", revisoes);
+        return "/material/audit";
     }
 
 }

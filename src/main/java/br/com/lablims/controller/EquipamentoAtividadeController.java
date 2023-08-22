@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.EquipamentoAtividade;
 import br.com.lablims.model.EquipamentoAtividadeDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.EquipamentoAtividadeService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/equipamentoAtividades")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class EquipamentoAtividadeController {
 
     private final EquipamentoAtividadeService equipamentoAtividadeService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public EquipamentoAtividadeController(
             final EquipamentoAtividadeService equipamentoAtividadeService) {
@@ -92,6 +101,21 @@ public class EquipamentoAtividadeController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("equipamentoAtividade.delete.success"));
         }
         return "redirect:/equipamentoAtividades";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<EquipamentoAtividade>> revisoes = genericRevisionRepository.listaRevisoes(EquipamentoAtividade.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamentoAtividade/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        EquipamentoAtividade equipamentoAtividade = equipamentoAtividadeService.findById(id);
+        List<EntityRevision<EquipamentoAtividade>> revisoes = genericRevisionRepository.listaRevisoesById(equipamentoAtividade.getId(), EquipamentoAtividade.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamentoAtividade/audit";
     }
 
 }

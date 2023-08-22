@@ -1,14 +1,18 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
 import br.com.lablims.domain.EscalaMedida;
+import br.com.lablims.domain.UnidadeMedida;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.UnidadeMedidaDTO;
 import br.com.lablims.repos.EscalaMedidaRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.UnidadeMedidaService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/unidadeMedidas")
@@ -33,6 +39,9 @@ public class UnidadeMedidaController {
 
     private final UnidadeMedidaService unidadeMedidaService;
     private final EscalaMedidaRepository escalaMedidaRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public UnidadeMedidaController(final UnidadeMedidaService unidadeMedidaService,
             final EscalaMedidaRepository escalaMedidaRepository) {
@@ -104,6 +113,21 @@ public class UnidadeMedidaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("unidadeMedida.delete.success"));
         }
         return "redirect:/unidadeMedidas";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<UnidadeMedida>> revisoes = genericRevisionRepository.listaRevisoes(UnidadeMedida.class);
+        model.addAttribute("audits", revisoes);
+        return "/unidadeMedida/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        UnidadeMedida unidadeMedida = unidadeMedidaService.findById(id);
+        List<EntityRevision<UnidadeMedida>> revisoes = genericRevisionRepository.listaRevisoesById(unidadeMedida.getId(), UnidadeMedida.class);
+        model.addAttribute("audits", revisoes);
+        return "/unidadeMedida/audit";
     }
 
 }

@@ -112,8 +112,8 @@ public class CategoriaMetodologiaController {
 
     @RequestMapping("/audit/{id}")
     public String getRevisions(Model model, @PathVariable final Integer id) {
-        CategoriaMetodologia xxx = categoriaMetodologiaService.findById(id);
-        List<EntityRevision<CategoriaMetodologia>> revisoes = genericRevisionRepository.listaRevisoesById(xxx.getId(), CategoriaMetodologia.class);
+        CategoriaMetodologia categoriaMetodologia = categoriaMetodologiaService.findById(id);
+        List<EntityRevision<CategoriaMetodologia>> revisoes = genericRevisionRepository.listaRevisoesById(categoriaMetodologia.getId(), CategoriaMetodologia.class);
         model.addAttribute("audits", revisoes);
         return "/categoriaMetodologia/audit";
     }

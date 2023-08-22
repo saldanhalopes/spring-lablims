@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.MetodologiaStatus;
 import br.com.lablims.model.MetodologiaStatusDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.service.MetodologiaStatusService;
@@ -20,6 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MetodologiaStatusController {
 
     private final MetodologiaStatusService metodologiaStatusService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public MetodologiaStatusController(final MetodologiaStatusService metodologiaStatusService) {
         this.metodologiaStatusService = metodologiaStatusService;
@@ -91,6 +100,21 @@ public class MetodologiaStatusController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("metodologiaStatus.delete.success"));
         }
         return "redirect:/metodologiaStatuss";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<MetodologiaStatus>> revisoes = genericRevisionRepository.listaRevisoes(MetodologiaStatus.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologiaStatus/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        MetodologiaStatus metodologiaStatus = metodologiaStatusService.findById(id);
+        List<EntityRevision<MetodologiaStatus>> revisoes = genericRevisionRepository.listaRevisoesById(metodologiaStatus.getId(), MetodologiaStatus.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologiaStatus/audit";
     }
 
 }

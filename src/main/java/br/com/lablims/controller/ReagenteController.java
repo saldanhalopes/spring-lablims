@@ -1,6 +1,7 @@
 package br.com.lablims.controller;
 
 import br.com.lablims.domain.Arquivos;
+import br.com.lablims.domain.Reagente;
 import br.com.lablims.domain.UnidadeMedida;
 import br.com.lablims.model.ReagenteDTO;
 import br.com.lablims.model.SimplePage;
@@ -26,6 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -36,6 +42,9 @@ public class ReagenteController {
     private final ReagenteService reagenteService;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
     private final ArquivosRepository arquivosRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ReagenteController(final ReagenteService reagenteService,
             final UnidadeMedidaRepository unidadeMedidaRepository,
@@ -111,6 +120,21 @@ public class ReagenteController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("reagente.delete.success"));
         }
         return "redirect:/reagentes";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Reagente>> revisoes = genericRevisionRepository.listaRevisoes(Reagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/reagente/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Reagente reagent = reagenteService.findById(id);
+        List<EntityRevision<Reagente>> revisoes = genericRevisionRepository.listaRevisoesById(reagent.getId(), Reagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/reagente/audit";
     }
 
 }

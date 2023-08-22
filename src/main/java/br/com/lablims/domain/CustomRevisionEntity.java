@@ -28,7 +28,17 @@ public class CustomRevisionEntity extends DefaultRevisionEntity {
     private String revType;
     private String motivo;
 
-    public CustomRevisionEntity(Integer revisaoId, Date revisaoData, String userName, String ip, String motivo, String revType) {
+    private static String motivoText;
+
+    public static String getMotivoText() {
+        return motivoText;
+    }
+
+    public static void setMotivoText(String motivoText) {
+        CustomRevisionEntity.motivoText = motivoText;
+    }
+
+    public CustomRevisionEntity(Integer revisaoId, Date revisaoData, String userName, String ip, String revType, String motivo) {
         this.setId(revisaoId);
         this.setTimestamp(revisaoData.getTime());
         this.userName = userName;

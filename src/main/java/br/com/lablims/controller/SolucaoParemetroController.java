@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.SolucaoParemetro;
 import br.com.lablims.domain.SolucaoRegistro;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.SolucaoParemetroDTO;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -34,6 +40,9 @@ public class SolucaoParemetroController {
     private final SolucaoParemetroService solucaoParemetroService;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
 
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+    
     public SolucaoParemetroController(final SolucaoParemetroService solucaoParemetroService,
             final SolucaoRegistroRepository solucaoRegistroRepository) {
         this.solucaoParemetroService = solucaoParemetroService;
@@ -100,6 +109,21 @@ public class SolucaoParemetroController {
         solucaoParemetroService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("solucaoParemetro.delete.success"));
         return "redirect:/solucaoParemetros";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<SolucaoParemetro>> revisoes = genericRevisionRepository.listaRevisoes(SolucaoParemetro.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoParemetro/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        SolucaoParemetro solucaoParemetro = solucaoParemetroService.findById(id);
+        List<EntityRevision<SolucaoParemetro>> revisoes = genericRevisionRepository.listaRevisoesById(solucaoParemetro.getId(), SolucaoParemetro.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoParemetro/audit";
     }
 
 }

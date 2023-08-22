@@ -1,20 +1,16 @@
 package br.com.lablims.controller;
 
-import br.com.lablims.domain.Arquivos;
-import br.com.lablims.domain.EquipamentoTipo;
-import br.com.lablims.domain.EscalaMedida;
-import br.com.lablims.domain.Setor;
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.*;
 import br.com.lablims.model.EquipamentoDTO;
 import br.com.lablims.model.SimplePage;
-import br.com.lablims.repos.ArquivosRepository;
-import br.com.lablims.repos.EquipamentoTipoRepository;
-import br.com.lablims.repos.EscalaMedidaRepository;
-import br.com.lablims.repos.SetorRepository;
+import br.com.lablims.repos.*;
 import br.com.lablims.service.EquipamentoService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/equipamentos")
@@ -42,6 +40,9 @@ public class EquipamentoController {
     private final SetorRepository setorRepository;
     private final ArquivosRepository arquivosRepository;
     private final EscalaMedidaRepository escalaMedidaRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public EquipamentoController(final EquipamentoService equipamentoService,
             final EquipamentoTipoRepository equipamentoTipoRepository,
@@ -132,6 +133,21 @@ public class EquipamentoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("equipamento.delete.success"));
         }
         return "redirect:/equipamentos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Equipamento>> revisoes = genericRevisionRepository.listaRevisoes(Equipamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamento/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Equipamento equipamento = equipamentoService.findById(id);
+        List<EntityRevision<Equipamento>> revisoes = genericRevisionRepository.listaRevisoesById(equipamento.getId(), Equipamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamento/audit";
     }
 
 }

@@ -1,9 +1,10 @@
 package br.com.lablims.controller;
 
 import br.com.lablims.domain.CategoriaMetodologia;
+import br.com.lablims.domain.Metodologia;
 import br.com.lablims.model.MetodologiaDTO;
 import br.com.lablims.model.SimplePage;
-import br.com.lablims.repos.CategoriaMetodologiaRepository;
+import br.com.lablims.repos.MetodologiaRepository;
 import br.com.lablims.service.MetodologiaService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -34,23 +40,27 @@ public class MetodologiaController {
     private final MetodologiaService metodologiaService;
     private final CategoriaMetodologiaRepository categoriaMetodologiaRepository;
 
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+
+
     public MetodologiaController(final MetodologiaService metodologiaService,
-            final CategoriaMetodologiaRepository categoriaMetodologiaRepository) {
+                                 final CategoriaMetodologiaRepository categoriaMetodologiaRepository) {
         this.metodologiaService = metodologiaService;
         this.categoriaMetodologiaRepository = categoriaMetodologiaRepository;
     }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
-        model.addAttribute("categoriaMetodologiaValues", categoriaMetodologiaRepository.findAll(Sort.by("id"))
+        model.addAttribute("MetodologiaValues", categoriaMetodologiaRepository.findAll(Sort.by("id"))
                 .stream()
                 .collect(CustomCollectors.toSortedMap(CategoriaMetodologia::getId, CategoriaMetodologia::getCategoria)));
     }
 
     @GetMapping
     public String list(@RequestParam(required = false) final String filter,
-            @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable,
-            final Model model) {
+                       @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable,
+                       final Model model) {
         final SimplePage<MetodologiaDTO> metodologias = metodologiaService.findAll(filter, pageable);
         model.addAttribute("metodologias", metodologias);
         model.addAttribute("filter", filter);
@@ -65,7 +75,7 @@ public class MetodologiaController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("metodologia") @Valid final MetodologiaDTO metodologiaDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+                      final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "metodologia/add";
         }
@@ -82,8 +92,8 @@ public class MetodologiaController {
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable final Integer id,
-            @ModelAttribute("metodologia") @Valid final MetodologiaDTO metodologiaDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+                       @ModelAttribute("metodologia") @Valid final MetodologiaDTO metodologiaDTO,
+                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "metodologia/edit";
         }
@@ -94,7 +104,7 @@ public class MetodologiaController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable final Integer id,
-            final RedirectAttributes redirectAttributes) {
+                         final RedirectAttributes redirectAttributes) {
         final String referencedWarning = metodologiaService.getReferencedWarning(id);
         if (referencedWarning != null) {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, referencedWarning);
@@ -103,6 +113,21 @@ public class MetodologiaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("metodologia.delete.success"));
         }
         return "redirect:/metodologias";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Metodologia>> revisoes = genericRevisionRepository.listaRevisoes(Metodologia.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologia/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Metodologia metodologia = metodologiaService.findById(id);
+        List<EntityRevision<Metodologia>> revisoes = genericRevisionRepository.listaRevisoesById(metodologia.getId(), Metodologia.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologia/audit";
     }
 
 }

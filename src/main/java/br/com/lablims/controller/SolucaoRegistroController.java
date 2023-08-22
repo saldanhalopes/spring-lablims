@@ -1,10 +1,13 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.SolucaoRegistro;
 import br.com.lablims.domain.SolucaoTipo;
 import br.com.lablims.domain.UnidadeMedida;
 import br.com.lablims.domain.Usuario;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.SolucaoRegistroDTO;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.SolucaoTipoRepository;
 import br.com.lablims.repos.UnidadeMedidaRepository;
 import br.com.lablims.repos.UsuarioRepository;
@@ -13,6 +16,7 @@ import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/solucaoRegistros")
@@ -39,6 +45,10 @@ public class SolucaoRegistroController {
     private final SolucaoTipoRepository solucaoTipoRepository;
     private final UsuarioRepository usuarioRepository;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+
 
     public SolucaoRegistroController(final SolucaoRegistroService solucaoRegistroService,
             final SolucaoTipoRepository solucaoTipoRepository,
@@ -124,6 +134,21 @@ public class SolucaoRegistroController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("solucaoRegistro.delete.success"));
         }
         return "redirect:/solucaoRegistros";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<SolucaoRegistro>> revisoes = genericRevisionRepository.listaRevisoes(SolucaoRegistro.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoRegistro/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        SolucaoRegistro solucaoRegistro = solucaoRegistroService.findById(id);
+        List<EntityRevision<SolucaoRegistro>> revisoes = genericRevisionRepository.listaRevisoesById(solucaoRegistro.getId(), SolucaoRegistro.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoRegistro/audit";
     }
 
 }

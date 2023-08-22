@@ -2,12 +2,16 @@ package br.com.lablims.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.hibernate.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,18 +36,36 @@ public class HttpSecurityConfig {
 
     @Bean
     public SecurityFilterChain httpFilterChain(final HttpSecurity http) throws Exception {
-        return http.cors(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+        return http
+                .csrf((csrf -> csrf.disable()))
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/login", "/resources/**", "/css/**", "/images/**", "/js/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/login?invalidSession=true")
+                )
                 .formLogin(form -> form
-                    .loginPage("/login")
-                    .failureUrl("/login?loginError=true"))
+                        .loginPage("/login")
+                        .failureUrl("/login?loginError=true")
+                        .usernameParameter("username").passwordParameter("password")
+                        .defaultSuccessUrl("/")
+                        .permitAll())
                 .logout(logout -> logout
-                    .logoutSuccessUrl("/login?logoutSuccess=true")
-                    .deleteCookies("JSESSIONID"))
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .logoutSuccessUrl("/login?logoutSuccess=true")
+                        .deleteCookies("SESSION"))
                 .exceptionHandling(exception -> exception
-                    .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login?loginRequired=true")))
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login?loginRequired=true")))
                 .build();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry(){
+        SessionRegistry sessionRegistry = new SessionRegistryImpl();
+        return sessionRegistry;
     }
 
 }

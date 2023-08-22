@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.PlanoAnaliseReagente;
 import br.com.lablims.domain.Reagente;
 import br.com.lablims.model.PlanoAnaliseReagenteDTO;
 import br.com.lablims.model.SimplePage;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -33,6 +39,9 @@ public class PlanoAnaliseReagenteController {
 
     private final PlanoAnaliseReagenteService planoAnaliseReagenteService;
     private final ReagenteRepository reagenteRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public PlanoAnaliseReagenteController(
             final PlanoAnaliseReagenteService planoAnaliseReagenteService,
@@ -101,6 +110,21 @@ public class PlanoAnaliseReagenteController {
         planoAnaliseReagenteService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("planoAnaliseReagente.delete.success"));
         return "redirect:/planoAnaliseReagentes";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<PlanoAnaliseReagente>> revisoes = genericRevisionRepository.listaRevisoes(PlanoAnaliseReagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/planoAnaliseReagente/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        PlanoAnaliseReagente planoAnaliseReagente = planoAnaliseReagenteService.findById(id);
+        List<EntityRevision<PlanoAnaliseReagente>> revisoes = genericRevisionRepository.listaRevisoesById(planoAnaliseReagente.getId(), PlanoAnaliseReagente.class);
+        model.addAttribute("audits", revisoes);
+        return "/planoAnaliseReagente/audit";
     }
 
 }

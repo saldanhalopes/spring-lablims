@@ -1,16 +1,20 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
 import br.com.lablims.domain.AmostraTipo;
+import br.com.lablims.domain.Lote;
 import br.com.lablims.domain.Material;
 import br.com.lablims.model.LoteDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.AmostraTipoRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.repos.MaterialRepository;
 import br.com.lablims.service.LoteService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/lotes")
@@ -36,6 +42,9 @@ public class LoteController {
     private final LoteService loteService;
     private final MaterialRepository materialRepository;
     private final AmostraTipoRepository amostraTipoRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public LoteController(final LoteService loteService,
             final MaterialRepository materialRepository,
@@ -111,6 +120,21 @@ public class LoteController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("lote.delete.success"));
         }
         return "redirect:/lotes";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Lote>> revisoes = genericRevisionRepository.listaRevisoes(Lote.class);
+        model.addAttribute("audits", revisoes);
+        return "/lote/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Lote lote = loteService.findById(id);
+        List<EntityRevision<Lote>> revisoes = genericRevisionRepository.listaRevisoesById(lote.getId(), Lote.class);
+        model.addAttribute("audits", revisoes);
+        return "/lote/audit";
     }
 
 }

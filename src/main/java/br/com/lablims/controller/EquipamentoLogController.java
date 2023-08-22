@@ -1,20 +1,16 @@
 package br.com.lablims.controller;
 
-import br.com.lablims.domain.Arquivos;
-import br.com.lablims.domain.Equipamento;
-import br.com.lablims.domain.EquipamentoAtividade;
-import br.com.lablims.domain.Usuario;
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.*;
 import br.com.lablims.model.EquipamentoLogDTO;
 import br.com.lablims.model.SimplePage;
-import br.com.lablims.repos.ArquivosRepository;
-import br.com.lablims.repos.EquipamentoAtividadeRepository;
-import br.com.lablims.repos.EquipamentoRepository;
-import br.com.lablims.repos.UsuarioRepository;
+import br.com.lablims.repos.*;
 import br.com.lablims.service.EquipamentoLogService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/equipamentoLogs")
@@ -42,6 +40,9 @@ public class EquipamentoLogController {
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
     private final ArquivosRepository arquivosRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public EquipamentoLogController(final EquipamentoLogService equipamentoLogService,
             final EquipamentoAtividadeRepository equipamentoAtividadeRepository,
@@ -126,6 +127,21 @@ public class EquipamentoLogController {
         equipamentoLogService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("equipamentoLog.delete.success"));
         return "redirect:/equipamentoLogs";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<EquipamentoLog>> revisoes = genericRevisionRepository.listaRevisoes(EquipamentoLog.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamentoLog/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        EquipamentoLog equipamentoLog = equipamentoLogService.findById(id);
+        List<EntityRevision<EquipamentoLog>> revisoes = genericRevisionRepository.listaRevisoesById(equipamentoLog.getId(), EquipamentoLog.class);
+        model.addAttribute("audits", revisoes);
+        return "/equipamentoLog/audit";
     }
 
 }

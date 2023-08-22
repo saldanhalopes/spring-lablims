@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Departamento;
 import br.com.lablims.model.DepartamentoDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.DepartamentoService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/departamentos")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class DepartamentoController {
 
     private final DepartamentoService departamentoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public DepartamentoController(final DepartamentoService departamentoService) {
         this.departamentoService = departamentoService;
@@ -89,6 +98,21 @@ public class DepartamentoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("departamento.delete.success"));
         }
         return "redirect:/departamentos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Departamento>> revisoes = genericRevisionRepository.listaRevisoes(Departamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/departamento/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Departamento departamento = departamentoService.findById(id);
+        List<EntityRevision<Departamento>> revisoes = genericRevisionRepository.listaRevisoesById(departamento.getId(), Departamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/departamento/audit";
     }
 
 }

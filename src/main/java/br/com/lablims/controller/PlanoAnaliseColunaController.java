@@ -2,6 +2,7 @@ package br.com.lablims.controller;
 
 import br.com.lablims.domain.Coluna;
 import br.com.lablims.domain.PlanoAnalise;
+import br.com.lablims.domain.PlanoAnaliseColuna;
 import br.com.lablims.domain.UnidadeMedida;
 import br.com.lablims.model.PlanoAnaliseColunaDTO;
 import br.com.lablims.model.SimplePage;
@@ -28,6 +29,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -39,6 +45,9 @@ public class PlanoAnaliseColunaController {
     private final PlanoAnaliseRepository planoAnaliseRepository;
     private final ColunaRepository colunaRepository;
     private final UnidadeMedidaRepository unidadeMedidaRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public PlanoAnaliseColunaController(final PlanoAnaliseColunaService planoAnaliseColunaService,
             final PlanoAnaliseRepository planoAnaliseRepository,
@@ -116,6 +125,21 @@ public class PlanoAnaliseColunaController {
         planoAnaliseColunaService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("planoAnaliseColuna.delete.success"));
         return "redirect:/planoAnaliseColunas";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<PlanoAnaliseColuna>> revisoes = genericRevisionRepository.listaRevisoes(PlanoAnaliseColuna.class);
+        model.addAttribute("audits", revisoes);
+        return "/planoAnaliseColuna/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        PlanoAnaliseColuna planoAnaliseColuna = planoAnaliseColunaService.findById(id);
+        List<EntityRevision<PlanoAnaliseColuna>> revisoes = genericRevisionRepository.listaRevisoesById(planoAnaliseColuna.getId(), PlanoAnaliseColuna.class);
+        model.addAttribute("audits", revisoes);
+        return "/planoAnaliseColuna/audit";
     }
 
 }

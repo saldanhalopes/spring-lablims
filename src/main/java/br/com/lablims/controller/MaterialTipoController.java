@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.MaterialTipo;
 import br.com.lablims.model.MaterialTipoDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.service.MaterialTipoService;
@@ -20,7 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
 
+import java.util.List;
 
 @Controller
 @RequestMapping("/materialTipos")
@@ -28,6 +33,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MaterialTipoController {
 
     private final MaterialTipoService materialTipoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
+
 
     public MaterialTipoController(final MaterialTipoService materialTipoService) {
         this.materialTipoService = materialTipoService;
@@ -89,6 +98,21 @@ public class MaterialTipoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("materialTipo.delete.success"));
         }
         return "redirect:/materialTipos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<MaterialTipo>> revisoes = genericRevisionRepository.listaRevisoes(MaterialTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/materialTipo/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        MaterialTipo materialTipo = materialTipoService.findById(id);
+        List<EntityRevision<MaterialTipo>> revisoes = genericRevisionRepository.listaRevisoesById(materialTipo.getId(), MaterialTipo.class);
+        model.addAttribute("audits", revisoes);
+        return "/materialTipo/audit";
     }
 
 }

@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Turno;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.TurnoDTO;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.TurnoService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/turnos")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TurnoController {
 
     private final TurnoService turnoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public TurnoController(final TurnoService turnoService) {
         this.turnoService = turnoService;
@@ -89,6 +98,21 @@ public class TurnoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("turno.delete.success"));
         }
         return "redirect:/turnos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Turno>> revisoes = genericRevisionRepository.listaRevisoes(Turno.class);
+        model.addAttribute("audits", revisoes);
+        return "/turno/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Turno turno = turnoService.findById(id);
+        List<EntityRevision<Turno>> revisoes = genericRevisionRepository.listaRevisoesById(turno.getId(), Turno.class);
+        model.addAttribute("audits", revisoes);
+        return "/turno/audit";
     }
 
 }

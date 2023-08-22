@@ -1,7 +1,7 @@
 package br.com.lablims.service;
 
 import br.com.lablims.domain.AmostraTipo;
-import br.com.lablims.domain.AnaliseTipo;
+import br.com.lablims.domain.CustomRevisionEntity;
 import br.com.lablims.domain.Lote;
 import br.com.lablims.model.AmostraTipoDTO;
 import br.com.lablims.model.SimplePage;
@@ -9,9 +9,12 @@ import br.com.lablims.repos.AmostraTipoRepository;
 import br.com.lablims.repos.LoteRepository;
 import br.com.lablims.util.NotFoundException;
 import br.com.lablims.util.WebUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 
 @Service
@@ -20,11 +23,12 @@ public class AmostraTipoService {
     private final AmostraTipoRepository amostraTipoRepository;
     private final LoteRepository loteRepository;
 
-    public AmostraTipo findById(Integer id){
+    public AmostraTipo findById(Integer id) {
         return amostraTipoRepository.findById(id).orElse(null);
     }
+
     public AmostraTipoService(final AmostraTipoRepository amostraTipoRepository,
-            final LoteRepository loteRepository) {
+                              final LoteRepository loteRepository) {
         this.amostraTipoRepository = amostraTipoRepository;
         this.loteRepository = loteRepository;
     }
@@ -73,14 +77,15 @@ public class AmostraTipoService {
     }
 
     private AmostraTipoDTO mapToDTO(final AmostraTipo amostraTipo,
-            final AmostraTipoDTO amostraTipoDTO) {
+                                    final AmostraTipoDTO amostraTipoDTO) {
         amostraTipoDTO.setId(amostraTipo.getId());
         amostraTipoDTO.setTipo(amostraTipo.getTipo());
+        amostraTipoDTO.setVersion(amostraTipo.getVersion());
         return amostraTipoDTO;
     }
 
     private AmostraTipo mapToEntity(final AmostraTipoDTO amostraTipoDTO,
-            final AmostraTipo amostraTipo) {
+                                    final AmostraTipo amostraTipo) {
         amostraTipo.setTipo(amostraTipoDTO.getTipo());
         return amostraTipo;
     }

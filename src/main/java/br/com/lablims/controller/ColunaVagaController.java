@@ -1,14 +1,18 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
 import br.com.lablims.domain.ColunaStorage;
+import br.com.lablims.domain.ColunaVaga;
 import br.com.lablims.model.ColunaVagaDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.ColunaStorageRepository;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.ColunaVagaService;
 import br.com.lablims.util.CustomCollectors;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/colunaVagas")
@@ -33,6 +39,9 @@ public class ColunaVagaController {
 
     private final ColunaVagaService colunaVagaService;
     private final ColunaStorageRepository colunaStorageRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public ColunaVagaController(final ColunaVagaService colunaVagaService,
             final ColunaStorageRepository colunaStorageRepository) {
@@ -103,6 +112,21 @@ public class ColunaVagaController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("colunaVaga.delete.success"));
         }
         return "redirect:/colunaVagas";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<ColunaVaga>> revisoes = genericRevisionRepository.listaRevisoes(ColunaVaga.class);
+        model.addAttribute("audits", revisoes);
+        return "/colunaVaga/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        ColunaVaga colunaVaga = colunaVagaService.findById(id);
+        List<EntityRevision<ColunaVaga>> revisoes = genericRevisionRepository.listaRevisoesById(colunaVaga.getId(), ColunaVaga.class);
+        model.addAttribute("audits", revisoes);
+        return "/ColunaVaga/audit";
     }
 
 }

@@ -1,11 +1,15 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.config.EntityRevision;
+import br.com.lablims.domain.Grupo;
 import br.com.lablims.model.GrupoDTO;
 import br.com.lablims.model.SimplePage;
+import br.com.lablims.repos.GenericRevisionRepository;
 import br.com.lablims.service.GrupoService;
 import br.com.lablims.util.UserRoles;
 import br.com.lablims.util.WebUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/grupos")
@@ -28,6 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class GrupoController {
 
     private final GrupoService grupoService;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public GrupoController(final GrupoService grupoService) {
         this.grupoService = grupoService;
@@ -89,6 +98,21 @@ public class GrupoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("grupo.delete.success"));
         }
         return "redirect:/grupos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Grupo>> revisoes = genericRevisionRepository.listaRevisoes(Grupo.class);
+        model.addAttribute("audits", revisoes);
+        return "/grupo/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Grupo grupo = grupoService.findById(id);
+        List<EntityRevision<Grupo>> revisoes = genericRevisionRepository.listaRevisoesById(grupo.getId(), Grupo.class);
+        model.addAttribute("audits", revisoes);
+        return "/grupo/audit";
     }
 
 }

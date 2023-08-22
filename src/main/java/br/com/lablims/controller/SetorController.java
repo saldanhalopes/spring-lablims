@@ -1,6 +1,7 @@
 package br.com.lablims.controller;
 
 import br.com.lablims.domain.Departamento;
+import br.com.lablims.domain.Setor;
 import br.com.lablims.model.SetorDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.DepartamentoRepository;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -34,6 +40,8 @@ public class SetorController {
     private final SetorService setorService;
     private final DepartamentoRepository departamentoRepository;
 
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
     public SetorController(final SetorService setorService,
             final DepartamentoRepository departamentoRepository) {
         this.setorService = setorService;
@@ -103,6 +111,21 @@ public class SetorController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("setor.delete.success"));
         }
         return "redirect:/setors";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<Setor>> revisoes = genericRevisionRepository.listaRevisoes(Setor.class);
+        model.addAttribute("audits", revisoes);
+        return "/setor/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        Setor setor = setorService.findById(id);
+        List<EntityRevision<Setor>> revisoes = genericRevisionRepository.listaRevisoesById(setor.getId(), Setor.class);
+        model.addAttribute("audits", revisoes);
+        return "/setor/audit";
     }
 
 }

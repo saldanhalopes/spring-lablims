@@ -1,9 +1,6 @@
 package br.com.lablims.controller;
 
-import br.com.lablims.domain.Arquivos;
-import br.com.lablims.domain.Material;
-import br.com.lablims.domain.Metodologia;
-import br.com.lablims.domain.MetodologiaStatus;
+import br.com.lablims.domain.*;
 import br.com.lablims.model.MetodologiaVesaoDTO;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.repos.ArquivosRepository;
@@ -30,6 +27,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -42,6 +44,9 @@ public class MetodologiaVesaoController {
     private final ArquivosRepository arquivosRepository;
     private final MaterialRepository materialRepository;
     private final MetodologiaStatusRepository metodologiaStatusRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public MetodologiaVesaoController(final MetodologiaVesaoService metodologiaVesaoService,
             final MetodologiaRepository metodologiaRepository,
@@ -129,6 +134,21 @@ public class MetodologiaVesaoController {
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("metodologiaVesao.delete.success"));
         }
         return "redirect:/metodologiaVesaos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<MetodologiaVesao>> revisoes = genericRevisionRepository.listaRevisoes(MetodologiaVesao.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologiaVesao/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        MetodologiaVesao metodologiaVesao = metodologiaVesaoService.findById(id);
+        List<EntityRevision<MetodologiaVesao>> revisoes = genericRevisionRepository.listaRevisoesById(metodologiaVesao.getId(), MetodologiaVesao.class);
+        model.addAttribute("audits", revisoes);
+        return "/metodologiaVesao/audit";
     }
 
 }

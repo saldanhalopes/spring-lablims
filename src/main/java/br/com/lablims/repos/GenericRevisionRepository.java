@@ -37,9 +37,10 @@ public class GenericRevisionRepository<T> {
 
         for (Object item : lstHistoryWithRev) {
             RevisionType revisionType = (RevisionType) ((Object[]) item)[2];
-            T listaRevisoes = (T)((Object[]) item)[0];
+            T listaRevisoes = (T) ((Object[]) item)[0];
             CustomRevisionEntity r = (CustomRevisionEntity) ((Object[]) item)[1];
-            allRevisions.add(new EntityRevision(new CustomRevisionEntity(r.getId(), r.getRevisionDate(), r.getUserName(), r.getIp(), r.getMotivo(), revisionType.toString()), listaRevisoes));
+            allRevisions.add(new EntityRevision(new CustomRevisionEntity(r.getId(), r.getRevisionDate(),
+                    r.getUserName(), r.getIp(), revisionType.toString(), r.getMotivo()), listaRevisoes));
         }
         return allRevisions;
     }
@@ -54,9 +55,10 @@ public class GenericRevisionRepository<T> {
 
         for (Object item : lstHistoryOfUserWithRev) {
             RevisionType revisionType = (RevisionType) ((Object[]) item)[2];
-            T listaRevisoes = (T)((Object[]) item)[0];
+            T listaRevisoes = (T) ((Object[]) item)[0];
             CustomRevisionEntity r = (CustomRevisionEntity) ((Object[]) item)[1];
-            allRevisions.add(new EntityRevision(new CustomRevisionEntity(r.getId(), r.getRevisionDate(), r.getUserName(), r.getIp(), r.getMotivo(), revisionType.toString()), listaRevisoes));
+            allRevisions.add(new EntityRevision(new CustomRevisionEntity(r.getId(), r.getRevisionDate(),
+                    r.getUserName(), r.getIp(), revisionType.toString(), r.getMotivo()), listaRevisoes));
         }
         return allRevisions;
     }

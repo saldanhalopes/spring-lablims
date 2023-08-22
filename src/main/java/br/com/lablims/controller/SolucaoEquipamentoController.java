@@ -1,5 +1,6 @@
 package br.com.lablims.controller;
 
+import br.com.lablims.domain.SolucaoEquipamento;
 import br.com.lablims.domain.SolucaoRegistro;
 import br.com.lablims.model.SimplePage;
 import br.com.lablims.model.SolucaoEquipamentoDTO;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import br.com.lablims.repos.*;
+import br.com.lablims.config.EntityRevision;
+
+import java.util.List;
 
 
 @Controller
@@ -33,6 +39,9 @@ public class SolucaoEquipamentoController {
 
     private final SolucaoEquipamentoService solucaoEquipamentoService;
     private final SolucaoRegistroRepository solucaoRegistroRepository;
+
+    @Autowired
+    private GenericRevisionRepository genericRevisionRepository;
 
     public SolucaoEquipamentoController(final SolucaoEquipamentoService solucaoEquipamentoService,
             final SolucaoRegistroRepository solucaoRegistroRepository) {
@@ -100,6 +109,21 @@ public class SolucaoEquipamentoController {
         solucaoEquipamentoService.delete(id);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("solucaoEquipamento.delete.success"));
         return "redirect:/solucaoEquipamentos";
+    }
+
+    @RequestMapping("/audit")
+    public String getRevisions(Model model) {
+        List<EntityRevision<SolucaoEquipamento>> revisoes = genericRevisionRepository.listaRevisoes(SolucaoEquipamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoEquipamento/audit";
+    }
+
+    @RequestMapping("/audit/{id}")
+    public String getRevisions(Model model, @PathVariable final Integer id) {
+        SolucaoEquipamento solucaoEquipamento = solucaoEquipamentoService.findById(id);
+        List<EntityRevision<SolucaoEquipamento>> revisoes = genericRevisionRepository.listaRevisoesById(solucaoEquipamento.getId(), SolucaoEquipamento.class);
+        model.addAttribute("audits", revisoes);
+        return "/solucaoEquipamento/audit";
     }
 
 }
