@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 
 
 import br.com.lablims.config.CustomRevisionListener;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionEntity;
 
@@ -15,7 +12,8 @@ import java.util.Date;
 
 @Entity
 @RevisionEntity(value = CustomRevisionListener.class)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)

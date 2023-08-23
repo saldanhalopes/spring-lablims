@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  db:
+    image: 'postgres'
+    container_name: db
+    restart: always
+    env_file: ./.env
+    ports:
+      - 0.0.0.0:$POSTGRES_LOCAL_PORT:$POSTGRES_DOCKER_PORT
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=&POSTGRES_DB
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    networks:
+      - postgres-compose-network
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+    container_name: app
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:postgresql://db:$POSTGRES_DOCKER_PORT/$POSTGRES_DB",
+        "spring.datasource.username" : "$POSTGRES_USER",
+        "spring.datasource.password" : "$POSTGRES_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update",
+        "spring.jpa.properties.hibernate.default_schema" : "principal",
+        "spring.datasource.dbcp2.max-wait-millis" : "30000",
+        "spring.datasource.dbcp2.validation-query" : "select 1",
+        "spring.datasource.dbcp2.validation-query-timeout" : "30",
+        "spring.jpa.show-sql" : "true",
+        "spring.sql.init.mode=" : "always",
+        "spring.jpa.open-in-view" : "false",
+        "spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation" : "true",
+        "spring.jpa.properties.hibernate.id.new_generator_mappings" : "true",
+        "spring.mvc.format.date" : "dd-MM-yyyy",
+        "spring.mvc.format.time" : "HH\:mm\:ss",
+        "server.servlet.session.timeout" : "30m",
+        "spring.jpa.properties.org.hibernate.envers.default_schema" : "audit",
+        "spring.jpa.properties.org.hibernate.envers.audit_table_prefix" : "tba_",
+        "spring.jpa.properties.org.hibernate.envers.audit_table_suffix" : "_aud",
+        "spring.jpa.properties.org.hibernate.envers.revision_field_name" : "revision",
+        "spring.jpa.properties.org.hibernate.envers.store_data_at_delete" : "true",
+        "spring.jpa.properties.org.hibernate.envers.do_not_audit_optimistic_locking_field" : "false"
+      }'
+
+  pgadmin:
+      image: dpage/pgadmin4
+      container_name: "pgadmin"
+      restart: always
+      env_file: ./.env
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=$PGADMIN_USER
+        - PGADMIN_DEFAULT_PASSWORD=$PGADMIN_PASSWORD
+      ports:
+        - "8090:80"
+      depends_on:
+        - db
+      networks:
+        - postgres-compose-network
+
+networks:
+  postgres-compose-network:
+    driver: bridge

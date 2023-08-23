@@ -6,7 +6,7 @@ const WarningsToErrorsPlugin = require('warnings-to-errors-webpack-plugin');
 
 
 module.exports = (env, argv) => ({
-  entry: './src/main/resources/js/app.js',
+  entry: './src/main/resources/static/js/app.js',
   output: {
     path: path.resolve(__dirname, './target/classes/static'),
     filename: 'js/bundle.js'
@@ -28,7 +28,7 @@ module.exports = (env, argv) => ({
   module: {
     rules: [
       {
-        test: /\.js$'/,
+        test: /\.js'/,
         include: path.resolve(__dirname, './src/main/resources/js'),
         use: {
           loader: 'babel-loader',

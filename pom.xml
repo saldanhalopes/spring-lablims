@@ -10,7 +10,7 @@
     </parent>
     <groupId>br.com</groupId>
     <artifactId>lablims</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>lablims</name>
     <description>Projeto LabLims Web</description>
     <properties>
@@ -86,9 +86,14 @@
             <artifactId>font-awesome</artifactId>
             <version>6.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>lablims</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
