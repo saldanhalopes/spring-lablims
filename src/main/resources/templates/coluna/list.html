@@ -1,58 +1,57 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{coluna.list.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{coluna.list.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/colunas/add}" th:text="#{coluna.list.createNew}" class="btn btn-primary ms-2" />
-                </div>
+      layout:decorate="~{fragments/list}" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title th:text="#{coluna.list.headline}"/>
+</head>
+<span layout:fragment="listHeadline">
+    <h2 th:text="#{coluna.list.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="createNew">
+    <a th:href="@{/colunas/add}" th:text="#{coluna.list.createNew}"
+       class="btn btn-success ms-2" sec:authorize="hasAnyAuthority('ADMIN', 'MASTERUSER', 'POWERUSER')"/>
+</span>
+<span layout:fragment="listBackMenu">
+    <a th:href="@{/parameters}" th:text="#{parameters.back}" class="btn btn-secondary"/>
+</span>
+<div layout:fragment="listErrors">
+    <div th:if="${colunas.empty}" th:text="#{coluna.list.empty}"/>
+    <div th:if="${!colunas.empty}" class="table-responsive"/>
+</div>
+<span layout:fragment="listHeader">
+    <th th:text="#{coluna.codigo.label}" scope="col" />
+    <th th:text="#{coluna.partNumber.label}" scope="col" />
+    <th th:text="#{coluna.obs.label}" scope="col" />
+    <th th:text="#{coluna.tipoColuna.label}" scope="col" />
+    <th th:text="#{coluna.fabricanteColuna.label}" scope="col" />
+    <th th:text="#{coluna.marcaColuna.label}" scope="col" />
+    <th th:text="#{coluna.faseColuna.label}" scope="col" />
+</span>
+<span layout:fragment="listContent">
+    <tr th:each="coluna : ${colunas}">
+        <td th:text="${coluna.id}" />
+        <td th:text="${coluna.version}" />
+        <td th:text="${coluna.codigo}" />
+        <td th:text="${coluna.partNumber}" />
+        <td th:text="${coluna.obs}" />
+        <td th:text="${coluna.tipoColuna}" />
+        <td th:text="${coluna.fabricanteColuna}" />
+        <td th:text="${coluna.marcaColuna}" />
+        <td th:text="${coluna.faseColuna}" />
+        <td>
+            <div class="float-end text-nowrap">
+                <a th:href="@{/colunas/edit/{id}(id=${coluna.id})}"
+                   th:text="#{coluna.list.edit}" class="btn btn-sm btn-info"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'MASTERUSER')"/>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#remover_'+${coluna.id}" th:text="#{delete.btn}"
+                        sec:authorize="hasAnyAuthority('ADMIN')"/>
+                <div th:replace="fragments/modal :: modalDelete(field=${coluna.id}, link='colunas')"></div>
             </div>
-            <div th:replace="~{fragments/utils::searchFilter(object='coluna')}" />
-            <div th:if="${colunas.empty}" th:text="#{coluna.list.empty}" />
-            <div th:if="${!colunas.empty}" class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th th:text="#{coluna.id.label}" scope="col" />
-                            <th th:text="#{coluna.codigo.label}" scope="col" />
-                            <th th:text="#{coluna.partNumber.label}" scope="col" />
-                            <th th:text="#{coluna.obs.label}" scope="col" />
-                            <th th:text="#{coluna.tipoColuna.label}" scope="col" />
-                            <th th:text="#{coluna.fabricanteColuna.label}" scope="col" />
-                            <th th:text="#{coluna.marcaColuna.label}" scope="col" />
-                            <th th:text="#{coluna.faseColuna.label}" scope="col" />
-                            <th><!-- --></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="coluna : ${colunas}">
-                            <td th:text="${coluna.id}" />
-                            <td th:text="${coluna.codigo}" />
-                            <td th:text="${coluna.partNumber}" />
-                            <td th:text="${coluna.obs}" />
-                            <td th:text="${coluna.tipoColuna}" />
-                            <td th:text="${coluna.fabricanteColuna}" />
-                            <td th:text="${coluna.marcaColuna}" />
-                            <td th:text="${coluna.faseColuna}" />
-                            <td>
-                                <div class="float-end text-nowrap">
-                                    <a th:href="@{/colunas/edit/{id}(id=${coluna.id})}" th:text="#{coluna.list.edit}" class="btn btn-sm btn-info" />
-                                    <form th:action="@{/colunas/delete/{id}(id=${coluna.id})}"
-                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
-                                        <button th:text="#{coluna.list.delete}" type="submit" class="btn btn-sm btn-danger" />
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:replace="~{fragments/utils::pagination()}" />
-        </div>
-    </body>
+        </td>
+    </tr>
+</span>
+<span layout:fragment="listAudit">
+    <a th:href="@{/colunas/audit}" th:text="#{audit.list}" class="btn btn-warning ms-2" sec:authorize="hasAnyAuthority('ADMIN')"/>
+</span>
 </html>

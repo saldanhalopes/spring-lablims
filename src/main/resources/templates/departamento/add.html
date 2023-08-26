@@ -1,24 +1,21 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{departamento.add.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{departamento.add.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/departamentos}" th:text="#{departamento.add.back}" class="btn btn-secondary" />
-                </div>
-            </div>
-            <div th:replace="~{fragments/forms::globalErrors('departamento')}" />
-            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='departamento', field='departamento')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='departamento', field='siglaDepartamento')}" />
-                <div th:replace="~{fragments/forms::inputRow(object='departamento', field='descricao')}" />
-                <input type="submit" th:value="#{departamento.add.headline}" class="btn btn-primary mt-4" />
-            </form>
-        </div>
-    </body>
+      layout:decorate="~{fragments/add}">
+<head>
+    <title th:text="#{departamento.add.headline}"/>
+</head>
+<span layout:fragment="addHeadline">
+    <h1 th:text="#{departamento.add.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="addBack">
+    <a th:href="@{/departamentos}" th:text="#{add.back}" class="btn btn-secondary"/>
+</span>
+<div layout:fragment="addGlobalErrors">
+    <div th:replace="~{fragments/forms::globalErrors('departamento')}"/>
+</div>
+<div layout:fragment="addContent">
+    <div th:replace="~{fragments/forms::inputRow(object='departamentodepartamento', field='departamento')}" />
+    <div th:replace="~{fragments/forms::inputRow(object='departamento', field='siglaDepartamento')}" />
+    <div th:replace="~{fragments/forms::inputRow(object='departamento', field='descricao')}" />
+</div>
 </html>

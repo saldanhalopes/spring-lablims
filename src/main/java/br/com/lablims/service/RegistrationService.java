@@ -32,7 +32,6 @@ public class RegistrationService {
 
     public void register(final RegistrationRequest registrationRequest) {
         log.info("registering new user: {}", registrationRequest.getUsername());
-
         final Usuario usuario = new Usuario();
         usuario.setEmail(registrationRequest.getEmail());
         usuario.setNome(registrationRequest.getNome());

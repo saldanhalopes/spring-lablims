@@ -15,12 +15,14 @@ public class CustomRevisionListener implements RevisionListener {
     public void newRevision(final Object entity) {
         CustomRevisionEntity revision = (CustomRevisionEntity) entity;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = auth.getPrincipal();
-        Object details = auth.getDetails();
-        if (principal instanceof UserDetails)
-            revision.setUserName(((UserDetails) principal).getUsername());
-        if (details instanceof WebAuthenticationDetails)
-            revision.setIp(((WebAuthenticationDetails) details).getRemoteAddress());
-        revision.setMotivo(CustomRevisionEntity.getMotivoText());
+        if (auth != null) {
+            Object principal = auth.getPrincipal();
+            Object details = auth.getDetails();
+            if (principal instanceof UserDetails)
+                revision.setUserName(((UserDetails) principal).getUsername());
+            if (details instanceof WebAuthenticationDetails)
+                revision.setIp(((WebAuthenticationDetails) details).getRemoteAddress());
+            revision.setMotivo(CustomRevisionEntity.getMotivoText());
+        }
     }
 }

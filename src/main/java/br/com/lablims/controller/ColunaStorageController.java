@@ -127,7 +127,7 @@ public class ColunaStorageController {
     public String getRevisions(Model model) {
         List<EntityRevision<ColunaStorage>> revisoes = genericRevisionRepository.listaRevisoes(ColunaStorage.class);
         model.addAttribute("audits", revisoes);
-        return "/xxx/audit";
+        return "/colunaStorage/audit";
     }
 
     @RequestMapping("/audit/{id}")

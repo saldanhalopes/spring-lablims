@@ -1,17 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Lablims</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
-    <link rel="stylesheet" th:href="@{/css/fontawesome.css}">
-    <link rel="stylesheet" th:href="@{/css/Chart.min.css}">
-    <link rel="stylesheet" th:href="@{/css/perfect-scrollbar.css}">
     <link rel="stylesheet" th:href="@{/css/app.css}">
-    <link rel="stylesheet" th:href="@{/css/datatables.css}">
     <link rel="shortcut icon" th:href="@{/images/favicon.png}" type="image/x-icon">
 </head>
 
@@ -23,7 +18,7 @@
                 <div class="card pt-4">
                     <div class="card-body">
                         <div class="text-center mb-5">
-                            <img src="/images/logo.png" height="96" class="mb-4">
+                            <img src="/images/logo.png" height="96" class="mb-4"/>
                         </div>
                         <div th:if="${MSG_INFO != null}" th:text="${MSG_INFO}" class="alert alert-info" role="alert" />
                         <div th:if="${MSG_ERROR != null}" th:text="${MSG_ERROR}" class="alert alert-danger" role="alert" />
@@ -32,7 +27,7 @@
                             <div class="form-group position-relative has-icon-left">
                                 <label for="username">Username</label>
                                 <div class="position-relative">
-                                    <input type="text" class="form-control" id="username" th:name="username">
+                                    <input type="text" class="form-control" id="username" th:name="username"/>
                                     <div class="form-control-icon">
                                         <span ><i class="fa-user fa-solid fa-2xl"></i></span>
                                     </div>
@@ -46,7 +41,7 @@
                                     </a>
                                 </div>
                                 <div class="position-relative">
-                                    <input type="password" class="form-control" id="password" th:name="password">
+                                    <input type="password" class="form-control" id="password" th:name="password"/>
                                     <div class="form-control-icon">
                                         <span ><i class="fa-lock fa-solid fa-2xl"></i></span>
                                     </div>
@@ -64,20 +59,11 @@
     </div>
 </div>
 
-<script th:src="@{/js/feather.min.js}"></script>
 <script th:src="@{/js/fontawesome.js}"></script>
-<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 <script th:src="@{/js/app.js}"></script>
-<script th:src="@{/js/Chart.min.js}"></script>
-<script th:src="@{/js/apexcharts.min.js}"></script>
 <script th:src="@{/js/dashboard.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-
 <script th:src="@{/js/jquery-3.7.0.js}"></script>
-<script th:src="@{/js/datatables.js}"></script>
-<script th:src="@{/js/datatables-bootstrap.js}"></script>
-
-<span layout:fragment="script"></span>
 
 </body>
 </html>

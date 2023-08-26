@@ -1,22 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{colunaStorageTipo.add.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{colunaStorageTipo.add.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/colunaStorageTipos}" th:text="#{colunaStorageTipo.add.back}" class="btn btn-secondary" />
-                </div>
-            </div>
-            <div th:replace="~{fragments/forms::globalErrors('colunaStorageTipo')}" />
-            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div th:replace="~{fragments/forms::inputRow(object='colunaStorageTipo', field='tipo')}" />
-                <input type="submit" th:value="#{colunaStorageTipo.add.headline}" class="btn btn-primary mt-4" />
-            </form>
-        </div>
-    </body>
+      layout:decorate="~{fragments/add}">
+<head>
+    <title th:text="#{colunaStorageTipo.add.headline}"/>
+</head>
+<span layout:fragment="addHeadline">
+    <h1 th:text="#{colunaStorageTipo.add.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="addBack">
+    <a th:href="@{/colunaStorageTipos}" th:text="#{add.back}" class="btn btn-secondary"/>
+</span>
+<div layout:fragment="addGlobalErrors">
+    <div th:replace="~{fragments/forms::globalErrors('colunaStorageTipo')}"/>
+</div>
+<div layout:fragment="addContent">
+    <div th:replace="~{fragments/forms::inputRow(object='colunaStorageTipo', field='tipo')}" />
+</div>
 </html>

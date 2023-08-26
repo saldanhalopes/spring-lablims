@@ -1,41 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{fragments/add}">
 <head>
     <title th:text="#{analiseProdutividade.add.headline}"/>
 </head>
-<body>
-<div layout:fragment="content">
-    <div class="card">
-        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-            <h4 class="card-title d-flex">
-                <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
-                <h1 th:text="#{analiseProdutividade.add.headline}" class="flex-grow-1"/>
-            </h4>
-            <ul class="list-inline d-flex mb-0">
-                <li class="d-flex align-items-center">
-                    <i class="bx bx-sort me-50 font-medium-3"></i>
-                    <a th:href="@{/analiseProdutividades}" th:text="#{analiseProdutividade.add.back}" class="btn btn-secondary"/>
-                </li>
-            </ul>
-        </div>
-        <div class="card-content">
-            <div th:replace="~{fragments/forms::globalErrors('analiseProdutividade')}"/>
-            <form th:action="${T(br.com.lablims.util.WebUtils).getRequest().requestURI}" method="post">
-                <div class="card-body">
-                    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='analiseProdutividade')}" />
-                    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='siglaProdutividade')}" />
-                    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='descricaoProdutividade')}" />
-                    <div th:replace="~{fragments/forms::selectColorRow(object='analiseProdutividade', field='corProdutividade' , type='select')}" />
-                </div>
-                <div class="card-footer">
-                    <div class="col-sm-12 d-flex justify-content-start">
-                        <input type="submit" th:value="#{analiseProdutividade.add.headline}" class="btn btn-success mt-4"/>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+<span layout:fragment="addHeadline">
+    <h1 th:text="#{analiseProdutividade.add.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="addBack">
+    <a th:href="@{/analiseProdutividades}" th:text="#{add.back}" class="btn btn-secondary"/>
+</span>
+<div layout:fragment="addGlobalErrors">
+    <div th:replace="~{fragments/forms::globalErrors('analiseProdutividade')}"/>
 </div>
-</body>
+<div layout:fragment="addContent">
+    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='analiseProdutividade')}" />
+    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='siglaProdutividade')}" />
+    <div th:replace="~{fragments/forms::inputRow(object='analiseProdutividade', field='descricaoProdutividade')}" />
+    <div th:replace="~{fragments/forms::selectColorRow(object='analiseProdutividade', field='corProdutividade' , type='select')}" />
+</div>
 </html>

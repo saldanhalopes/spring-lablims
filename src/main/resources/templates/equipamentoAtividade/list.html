@@ -1,46 +1,45 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout}">
-    <head>
-        <title th:text="#{equipamentoAtividade.list.headline}" />
-    </head>
-    <body>
-        <div layout:fragment="content">
-            <div class="d-flex flex-wrap mb-4">
-                <h1 th:text="#{equipamentoAtividade.list.headline}" class="flex-grow-1" />
-                <div>
-                    <a th:href="@{/equipamentoAtividades/add}" th:text="#{equipamentoAtividade.list.createNew}" class="btn btn-primary ms-2" />
-                </div>
+      layout:decorate="~{fragments/list}" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title th:text="#{equipamentoAtividade.list.headline}"/>
+</head>
+<span layout:fragment="listHeadline">
+    <h2 th:text="#{equipamentoAtividade.list.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="createNew">
+    <a th:href="@{/equipamentoAtividades/add}" th:text="#{equipamentoAtividade.list.createNew}"
+       class="btn btn-success ms-2" sec:authorize="hasAnyAuthority('ADMIN', 'MASTERUSER', 'POWERUSER')"/>
+</span>
+<span layout:fragment="listBackMenu">
+    <a th:href="@{/parameters}" th:text="#{parameters.back}" class="btn btn-secondary"/>
+</span>
+<div layout:fragment="listErrors">
+    <div th:if="${equipamentoAtividades.empty}" th:text="#{equipamentoAtividade.list.empty}"/>
+    <div th:if="${!equipamentoAtividades.empty}" class="table-responsive"/>
+</div>
+<span layout:fragment="listHeader">
+    <th th:text="#{equipamentoAtividade.atividade.label}" scope="col" />
+</span>
+<span layout:fragment="listContent">
+    <tr th:each="equipamentoAtividade : ${equipamentoAtividades}">
+        <td th:text="${equipamentoAtividade.id}"/>
+        <td th:text="${equipamentoAtividade.version}"/>
+        <td th:text="${equipamentoAtividade.atividade}" />
+        <td>
+            <div class="float-end text-nowrap">
+                <a th:href="@{/equipamentoAtividades/edit/{id}(id=${equipamentoAtividade.id})}"
+                   th:text="#{equipamentoAtividade.list.edit}" class="btn btn-sm btn-info"
+                   sec:authorize="hasAnyAuthority('ADMIN', 'MASTERUSER')"/>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        th:attr="data-bs-target='#remover_'+${equipamentoAtividade.id}" th:text="#{delete.btn}"
+                        sec:authorize="hasAnyAuthority('ADMIN')"/>
+                <div th:replace="fragments/modal :: modalDelete(field=${equipamentoAtividade.id}, link='equipamentoAtividades')"></div>
             </div>
-            <div th:replace="~{fragments/utils::searchFilter(object='equipamentoAtividade')}" />
-            <div th:if="${equipamentoAtividades.empty}" th:text="#{equipamentoAtividade.list.empty}" />
-            <div th:if="${!equipamentoAtividades.empty}" class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th th:text="#{equipamentoAtividade.id.label}" scope="col" />
-                            <th th:text="#{equipamentoAtividade.atividade.label}" scope="col" />
-                            <th><!-- --></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="equipamentoAtividade : ${equipamentoAtividades}">
-                            <td th:text="${equipamentoAtividade.id}" />
-                            <td th:text="${equipamentoAtividade.atividade}" />
-                            <td>
-                                <div class="float-end text-nowrap">
-                                    <a th:href="@{/equipamentoAtividades/edit/{id}(id=${equipamentoAtividade.id})}" th:text="#{equipamentoAtividade.list.edit}" class="btn btn-sm btn-info" />
-                                    <form th:action="@{/equipamentoAtividades/delete/{id}(id=${equipamentoAtividade.id})}"
-                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
-                                        <button th:text="#{equipamentoAtividade.list.delete}" type="submit" class="btn btn-sm btn-danger" />
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:replace="~{fragments/utils::pagination()}" />
-        </div>
-    </body>
+        </td>
+    </tr>
+</span>
+<span layout:fragment="listAudit">
+    <a th:href="@{/equipamentoAtividades/audit}" th:text="#{audit.list}" class="btn btn-warning ms-2" sec:authorize="hasAnyAuthority('ADMIN')"/>
+</span>
 </html>
