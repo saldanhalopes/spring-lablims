@@ -50,4 +50,4 @@ jobs:
           app-name: 'db-lablims'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CF4F658D748D44A9A3AD3C552A29234E }}
-          package: '*.war'
+          package: '*.jar'
